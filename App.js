@@ -2,7 +2,8 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { MaterialIcons } from '@expo/vector-icons'; // Ensure you have expo icons
+import {MaterialIcons} from '@expo/vector-icons'; // Ensure you have expo icons
+import Octicons from '@expo/vector-icons/Octicons';
 
 // Import screens
 import LoginScreen from './screens/LoginScreen';
@@ -10,6 +11,7 @@ import DashboardScreen from './screens/owners/DashboardScreen';
 import AttendanceScreen from './screens/owners/AttendanceScreen';
 import ProfileScreen from './screens/owners/ProfileScreen';
 import HomeScreen from './screens/owners/HomeScreen';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 
 // Import student screens
 import StudentDashboardScreen from './screens/students/DashboardScreen';
@@ -25,20 +27,20 @@ function OwnerTabNavigator() {
   return (
     <Tab.Navigator>
       <Tab.Screen 
-        name="Home" 
+        name="Response" 
         component={HomeScreen} 
         options={{ tabBarIcon: ({ color, size }) => <MaterialIcons name="home" size={size} color={color} /> }} 
       />
       <Tab.Screen 
-        name="Dashboard" 
+        name="History" 
         component={DashboardScreen} 
-        options={{ tabBarIcon: ({ color, size }) => <MaterialIcons name="dashboard" size={size} color={color} /> }} 
+        options={{ tabBarIcon: ({ color, size }) => <FontAwesome5 name="history" size={size} color={color} /> }} 
       />
-      <Tab.Screen 
+      {/* <Tab.Screen 
         name="Attendance" 
         component={AttendanceScreen} 
         options={{ tabBarIcon: ({ color, size }) => <MaterialIcons name="check-circle" size={size} color={color} /> }} 
-      />
+      /> */}
       <Tab.Screen 
         name="Profile" 
         component={ProfileScreen} 
@@ -58,15 +60,15 @@ function StudentTabNavigator() {
         options={{ tabBarIcon: ({ color, size }) => <MaterialIcons name="home" size={size} color={color} /> }} 
       />
       <Tab.Screen 
-        name="Dashboard" 
+        name="Forum" 
         component={StudentDashboardScreen} 
-        options={{ tabBarIcon: ({ color, size }) => <MaterialIcons name="dashboard" size={size} color={color} /> }} 
+        options={{ tabBarIcon: ({ color, size }) => <Octicons name="comment-discussion" size={size} color={color} /> }} 
       />
-      <Tab.Screen 
+      {/* <Tab.Screen 
         name="Attendance" 
         component={StudentAttendanceScreen} 
         options={{ tabBarIcon: ({ color, size }) => <MaterialIcons name="check-circle" size={size} color={color} /> }} 
-      />
+      /> */}
       <Tab.Screen 
         name="Profile" 
         component={StudentProfileScreen} 

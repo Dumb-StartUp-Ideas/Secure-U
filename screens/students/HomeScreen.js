@@ -9,6 +9,7 @@ const HomeScreen = () => {
   const [contacts, setContacts] = useState([]);
   const [newContactName, setNewContactName] = useState('');
   const [newContactNumber, setNewContactNumber] = useState('');
+  const [isFakeCallVisible, setFakeCallVisible] = useState(false); // State for Fake Call
 
   // Handle SOS Button Press
   const handleSOSPress = async () => {
@@ -68,11 +69,24 @@ const HomeScreen = () => {
     </View>
   );
 
+  // Simulate a fake call by showing the fake call modal
+  const handleFakeCallPress = () => {
+    setFakeCallVisible(true);
+    setTimeout(() => {
+      setFakeCallVisible(false); // Automatically dismiss fake call after 5 seconds
+    }, 5000);
+  };
+
   return (
     <View style={styles.container}>
       {/* SOS Button */}
       <TouchableOpacity style={styles.sosButton} onPress={handleSOSPress}>
         <Text style={styles.sosButtonText}>SOS</Text>
+      </TouchableOpacity>
+
+      {/* Fake Call Button */}
+      <TouchableOpacity style={styles.fakeCallButton} onPress={handleFakeCallPress}>
+        <Text style={styles.fakeCallButtonText}>Fake Call</Text>
       </TouchableOpacity>
 
       {/* Contacts List */}
@@ -110,6 +124,17 @@ const HomeScreen = () => {
           </TouchableOpacity>
         </View>
       </Modal>
+
+      {/* Fake Call Modal */}
+      <Modal isVisible={isFakeCallVisible}>
+        <View style={styles.fakeCallContent}>
+          <Text style={styles.fakeCallText}>Incoming Call...</Text>
+          <Text style={styles.fakeCallerID}>Unknown</Text>
+          <TouchableOpacity style={styles.fakeCallEndButton} onPress={() => setFakeCallVisible(false)}>
+            <Text style={styles.fakeCallEndButtonText}>End Call</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -133,6 +158,20 @@ const styles = StyleSheet.create({
   sosButtonText: {
     color: '#fff',
     fontSize: 24,
+    fontWeight: 'bold',
+  },
+  fakeCallButton: {
+    backgroundColor: 'green',
+    paddingVertical: 20,
+    borderRadius: 100,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 20,
+    elevation: 5,
+  },
+  fakeCallButtonText: {
+    color: '#fff',
+    fontSize: 20,
     fontWeight: 'bold',
   },
   contactsContainer: {
@@ -189,6 +228,33 @@ const styles = StyleSheet.create({
   addButtonText: {
     color: '#fff',
     fontSize: 16,
+  },
+  fakeCallContent: {
+    backgroundColor: '#000',
+    padding: 30,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  fakeCallText: {
+    color: '#fff',
+    fontSize: 24,
+    marginBottom: 10,
+  },
+  fakeCallerID: {
+    color: '#bbb',
+    fontSize: 18,
+    marginBottom: 20,
+  },
+  fakeCallEndButton: {
+    backgroundColor: 'red',
+    paddingVertical: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    width: '100%',
+  },
+  fakeCallEndButtonText: {
+    color: '#fff',
+    fontSize: 18,
   },
 });
 
