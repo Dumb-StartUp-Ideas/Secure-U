@@ -48,9 +48,9 @@ const BodyguardScreen = () => {
           style={styles.taskList}
         />
 
-        <TouchableOpacity style={styles.logoutButton} onPress={() => Alert.alert('Logged Out')}>
+        {/* <TouchableOpacity style={styles.logoutButton} onPress={() => Alert.alert('Logged Out')}>
           <Text style={styles.logoutButtonText}>Logout</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </SafeAreaView>
   );
