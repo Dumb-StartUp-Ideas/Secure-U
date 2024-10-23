@@ -12,27 +12,16 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true,
-      "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "We need access to your location to send SOS messages."
-      }
+      "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      },
-      "permissions": [
-        "ACCESS_FINE_LOCATION",
-        "SEND_SMS"
-      ]
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "permissions": [
-      "location",
-      "sms"
-    ]
+    }
   }
 }
