@@ -2,7 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import {MaterialIcons} from '@expo/vector-icons'; // Ensure you have expo icons
+import {MaterialIcons} from '@expo/vector-icons';
 import Octicons from '@expo/vector-icons/Octicons';
 
 // Import screens
