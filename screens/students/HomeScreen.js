@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, FlatList, TextInput, Alert } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, FlatList, TextInput, Alert, SafeAreaView } from 'react-native';
 import Modal from 'react-native-modal';
 import * as Location from 'expo-location';
 import * as SMS from 'expo-sms';
@@ -86,79 +86,84 @@ const HomeScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      {/* SOS Button */}
-      <View style={styles.sosButtonContainer}>
-        <TouchableOpacity style={styles.sosButton} onPress={handleSOSPress}>
-          <Text style={styles.sosButtonText}>SOS</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Fake Call Button */}
-      <TouchableOpacity style={styles.fakeCallButton} onPress={handleFakeCallPress}>
-        <Text style={styles.fakeCallButtonText}>Fake Call</Text>
-      </TouchableOpacity>
-
-      {/* Contacts List */}
-      <View style={styles.contactsContainer}>
-        <Text style={styles.sectionTitle}>Emergency Contacts</Text>
-        <FlatList
-          data={contacts}
-          renderItem={renderContact}
-          keyExtractor={(item, index) => index.toString()}
-          ListEmptyComponent={<Text style={styles.emptyList}>No contacts added yet.</Text>}
-        />
-        <TouchableOpacity style={styles.addContactButton} onPress={toggleModal}>
-          <Text style={styles.addContactText}>+ Add Contact</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Add Contact Modal */}
-      <Modal isVisible={isModalVisible} onBackdropPress={toggleModal}>
-        <View style={styles.modalContent}>
-          <TextInput
-            placeholder="Enter name"
-            value={newContactName}
-            onChangeText={setNewContactName}
-            style={styles.input}
-          />
-          <TextInput
-            placeholder="Enter phone number"
-            keyboardType="phone-pad"
-            value={newContactNumber}
-            onChangeText={setNewContactNumber}
-            style={styles.input}
-          />
-          <TouchableOpacity style={styles.addButton} onPress={addContact}>
-            <Text style={styles.addButtonText}>Add Contact</Text>
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        {/* SOS Button */}
+        <View style={styles.sosButtonContainer}>
+          <TouchableOpacity style={styles.sosButton} onPress={handleSOSPress}>
+            <Text style={styles.sosButtonText}>SOS</Text>
           </TouchableOpacity>
         </View>
-      </Modal>
 
-      {/* Fake Call Modal */}
-      <Modal isVisible={isFakeCallVisible} animationIn="slideInUp" animationOut="slideOutDown">
-        <View style={styles.fakeCallContent}>
-          <Text style={styles.fakeCallText}>Incoming Call...</Text>
-          <Text style={styles.fakeCallerID}>Unknown</Text>
-          <View style={styles.fakeCallButtons}>
-            <TouchableOpacity style={styles.fakeCallAcceptButton} onPress={handleAcceptFakeCall}>
-              <Text style={styles.fakeCallAcceptButtonText}>Accept</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.fakeCallEndButton} onPress={handleEndFakeCall}>
-              <Text style={styles.fakeCallEndButtonText}>Decline</Text>
+        {/* Fake Call Button */}
+        <TouchableOpacity style={styles.fakeCallButton} onPress={handleFakeCallPress}>
+          <Text style={styles.fakeCallButtonText}>Fake Call</Text>
+        </TouchableOpacity>
+
+        {/* Contacts List */}
+        <View style={styles.contactsContainer}>
+          <Text style={styles.sectionTitle}>Emergency Contacts</Text>
+          <FlatList
+            data={contacts}
+            renderItem={renderContact}
+            keyExtractor={(item, index) => index.toString()}
+            ListEmptyComponent={<Text style={styles.emptyList}>No contacts added yet.</Text>}
+          />
+          <TouchableOpacity style={styles.addContactButton} onPress={toggleModal}>
+            <Text style={styles.addContactText}>+ Add Contact</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Add Contact Modal */}
+        <Modal isVisible={isModalVisible} onBackdropPress={toggleModal}>
+          <View style={styles.modalContent}>
+            <TextInput
+              placeholder="Enter name"
+              value={newContactName}
+              onChangeText={setNewContactName}
+              style={styles.input}
+            />
+            <TextInput
+              placeholder="Enter phone number"
+              keyboardType="phone-pad"
+              value={newContactNumber}
+              onChangeText={setNewContactNumber}
+              style={styles.input}
+            />
+            <TouchableOpacity style={styles.addButton} onPress={addContact}>
+              <Text style={styles.addButtonText}>Add Contact</Text>
             </TouchableOpacity>
           </View>
-        </View>
-      </Modal>
-    </View>
+        </Modal>
+
+        {/* Fake Call Modal */}
+        <Modal isVisible={isFakeCallVisible} animationIn="slideInUp" animationOut="slideOutDown">
+          <View style={styles.fakeCallContent}>
+            <Text style={styles.fakeCallText}>Incoming Call...</Text>
+            <Text style={styles.fakeCallerID}>Unknown</Text>
+            <View style={styles.fakeCallButtons}>
+              <TouchableOpacity style={styles.fakeCallAcceptButton} onPress={handleAcceptFakeCall}>
+                <Text style={styles.fakeCallAcceptButtonText}>Accept</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.fakeCallEndButton} onPress={handleEndFakeCall}>
+                <Text style={styles.fakeCallEndButtonText}>Decline</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+      </View>
+    </SafeAreaView>
   );
 };
 
 // Styles
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1,
     backgroundColor: '#f5f5f5',
+  },
+  container: {
+    flex: 1,
   },
   sosButtonContainer: {
     flex: 1,

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, FlatList, TextInput, TouchableOpacity, Image, KeyboardAvoidingView, Platform } from 'react-native';
+import { StyleSheet, View, Text, FlatList, TextInput, TouchableOpacity, Image, KeyboardAvoidingView, Platform, SafeAreaView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
 
@@ -213,51 +213,57 @@ const ForumScreen = () => {
   );
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
-    >
-      <FlatList
-        data={posts}
-        renderItem={renderPost}
-        keyExtractor={(item) => item.id.toString()}
-        contentContainerStyle={styles.flatListContent}
-      />
-      <TouchableOpacity style={styles.showAddPostButton} onPress={() => setShowAddPost(!showAddPost)}>
-        <Text style={styles.showAddPostButtonText}>{showAddPost ? 'Cancel' : 'Add Post'}</Text>
-      </TouchableOpacity>
-      {showAddPost && (
-        <View style={styles.newPostContainer}>
-          <TextInput
-            placeholder="Write a post"
-            value={newPostText}
-            onChangeText={setNewPostText}
-            style={styles.newPostInput}
-          />
-          <View style={styles.pickerContainer}>
-            <Picker
-              selectedValue={selectedLabel}
-              onValueChange={(itemValue) => setSelectedLabel(itemValue)}
-              style={styles.picker}
-            >
-              <Picker.Item label="Select a label" value="" />
-              {labelOptions.map((label) => (
-                <Picker.Item key={label} label={label} value={label} />
-              ))}
-            </Picker>
+    <SafeAreaView style={styles.safeArea}>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
+      >
+        <FlatList
+          data={posts}
+          renderItem={renderPost}
+          keyExtractor={(item) => item.id.toString()}
+          contentContainerStyle={styles.flatListContent}
+        />
+        <TouchableOpacity style={styles.showAddPostButton} onPress={() => setShowAddPost(!showAddPost)}>
+          <Text style={styles.showAddPostButtonText}>{showAddPost ? 'Cancel' : 'Add Post'}</Text>
+        </TouchableOpacity>
+        {showAddPost && (
+          <View style={styles.newPostContainer}>
+            <TextInput
+              placeholder="Write a post"
+              value={newPostText}
+              onChangeText={setNewPostText}
+              style={styles.newPostInput}
+            />
+            <View style={styles.pickerContainer}>
+              <Picker
+                selectedValue={selectedLabel}
+                onValueChange={(itemValue) => setSelectedLabel(itemValue)}
+                style={styles.picker}
+              >
+                <Picker.Item label="Select a label" value="" />
+                {labelOptions.map((label) => (
+                  <Picker.Item key={label} label={label} value={label} />
+                ))}
+              </Picker>
+            </View>
+            <TouchableOpacity style={styles.addPostButton} onPress={addPost}>
+              <Text style={styles.addPostButtonText}>Submit Post</Text>
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.addPostButton} onPress={addPost}>
-            <Text style={styles.addPostButtonText}>Submit Post</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-    </KeyboardAvoidingView>
+        )}
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 
 // Styles
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+  },
   container: {
     flex: 1,
     backgroundColor: '#f8f9fa',
