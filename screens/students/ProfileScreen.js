@@ -45,8 +45,8 @@ const ProfileScreen = () => {
     </View>
   );
 
-  return (
-    <ScrollView style={styles.container}>
+  const renderHeader = () => (
+    <View>
       <View style={styles.headerContainer}>
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={24} color="#fff" />
@@ -93,17 +93,6 @@ const ProfileScreen = () => {
         editable={isEditing}
       />
 
-      <Text style={styles.sectionTitle}>Emergency Contacts</Text>
-      <FlatList
-        data={contacts}
-        renderItem={renderContactItem}
-        keyExtractor={item => item.id}
-        style={styles.contactList}
-      />
-      <TouchableOpacity style={styles.button} onPress={addContact}>
-        <Text style={styles.buttonText}>Add Contact</Text>
-      </TouchableOpacity>
-
       <Text style={styles.sectionTitle}>Safety Settings</Text>
       <View style={styles.setting}>
         <Text>Enable SOS Notifications</Text>
@@ -120,7 +109,6 @@ const ProfileScreen = () => {
         />
       </View>
 
-      <Text style={styles.sectionTitle}>Hobbies & Interests</Text>
       <TextInput
         style={styles.input}
         value={hobbies}
@@ -129,24 +117,41 @@ const ProfileScreen = () => {
         editable={isEditing}
       />
 
-      <Text style={styles.sectionTitle}>Recent Activities</Text>
-      <FlatList
-        data={recentActivities}
-        renderItem={renderActivityItem}
-        keyExtractor={item => item.id}
-        style={styles.activityList}
-      />
+      <Text style={styles.sectionTitle}>Emergency Contacts</Text>
+    </View>
+  );
 
-      {isEditing && (
-        <TouchableOpacity style={styles.saveButton} onPress={saveProfile}>
-          <Text style={styles.saveButtonText}>Save</Text>
-        </TouchableOpacity>
+  return (
+    <FlatList
+      data={contacts}
+      renderItem={renderContactItem}
+      keyExtractor={item => item.id}
+      ListHeaderComponent={renderHeader}
+      ListFooterComponent={() => (
+        <View>
+          <TouchableOpacity style={styles.button} onPress={addContact}>
+            <Text style={styles.buttonText}>Add Contact</Text>
+          </TouchableOpacity>
+
+          <Text style={styles.sectionTitle}>Recent Activities</Text>
+          <FlatList
+            data={recentActivities}
+            renderItem={renderActivityItem}
+            keyExtractor={item => item.id}
+          />
+
+          {isEditing && (
+            <TouchableOpacity style={styles.saveButton} onPress={saveProfile}>
+              <Text style={styles.saveButtonText}>Save</Text>
+            </TouchableOpacity>
+          )}
+
+          <TouchableOpacity style={styles.logoutButton} onPress={() => navigation.replace('Login')}>
+            <Text style={styles.logoutButtonText}>Logout</Text>
+          </TouchableOpacity>
+        </View>
       )}
-
-      <TouchableOpacity style={styles.logoutButton} onPress={() => Alert.alert('Logged Out')}>
-        <Text style={styles.logoutButtonText}>Logout</Text>
-      </TouchableOpacity>
-    </ScrollView>
+    />
   );
 };
 

@@ -141,7 +141,7 @@ const ProfileScreen = () => {
         </TouchableOpacity>
       )}
 
-      <TouchableOpacity style={styles.logoutButton} onPress={() => Alert.alert('Logged Out')}>
+      <TouchableOpacity style={styles.logoutButton} onPress={() => {navigation.replace('Login')}}>
         <Text style={styles.logoutButtonText}>Logout</Text>
       </TouchableOpacity>
     </ScrollView>
