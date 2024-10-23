@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput, FlatList, Alert, Switch, ScrollView, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput, FlatList, Alert, Switch, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native'; // For navigation
 import { Ionicons } from '@expo/vector-icons'; // For icons
 
@@ -46,119 +46,112 @@ const ProfileScreen = () => {
   );
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <ScrollView style={styles.container}>
-        <View style={styles.headerContainer}>
-          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-            <Ionicons name="arrow-back" size={24} color="#fff" />
-          </TouchableOpacity>
-          <Text style={styles.header}>Profile</Text>
-        </View>
-
-        <Image source={{ uri: 'https://c4.wallpaperflare.com/wallpaper/626/468/8/starry-sky-night-dark-wallpaper-preview.jpg' }} style={styles.coverPhoto} />
-        <View style={styles.profilePictureContainer}>
-          <Image source={{ uri: 'https://img.freepik.com/premium-photo/close-up-indian-male-security-guard-surveillance-room_161094-14189.jpg?w=996' }} style={styles.profilePicture} />
-        </View>
-
-        <TouchableOpacity style={styles.editButton} onPress={() => setIsEditing(true)}>
-          <Text style={styles.editButtonText}>Edit Profile</Text>
+    <ScrollView style={styles.container}>
+      <View style={styles.headerContainer}>
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+          <Ionicons name="arrow-back" size={24} color="#fff" />
         </TouchableOpacity>
+        <Text style={styles.header}>Profile</Text>
+      </View>
 
-        <TextInput
-          style={styles.input}
-          value={name}
-          onChangeText={setName}
-          placeholder="Name"
-          editable={isEditing}
-        />
-        <TextInput
-          style={styles.input}
-          value={email}
-          onChangeText={setEmail}
-          placeholder="Email"
-          keyboardType="email-address"
-          editable={isEditing}
-        />
-        <TextInput
-          style={styles.input}
-          value={college}
-          onChangeText={setCollege}
-          placeholder="College Name"
-          editable={isEditing}
-        />
-        <TextInput
-          style={styles.input}
-          value={bio}
-          onChangeText={setBio}
-          placeholder="Short Bio"
-          editable={isEditing}
-        />
+      <Image source={{ uri: 'https://c4.wallpaperflare.com/wallpaper/626/468/8/starry-sky-night-dark-wallpaper-preview.jpg' }} style={styles.coverPhoto} />
+      <Image source={{ uri: 'https://img.freepik.com/premium-photo/close-up-indian-male-security-guard-surveillance-room_161094-14189.jpg?w=996' }} style={styles.profilePicture} />
 
-        <Text style={styles.sectionTitle}>Emergency Contacts</Text>
-        <FlatList
-          data={contacts}
-          renderItem={renderContactItem}
-          keyExtractor={item => item.id}
-          style={styles.contactList}
+      <TouchableOpacity style={styles.editButton} onPress={() => setIsEditing(true)}>
+        <Text style={styles.editButtonText}>Edit Profile</Text>
+      </TouchableOpacity>
+
+      <TextInput
+        style={styles.input}
+        value={name}
+        onChangeText={setName}
+        placeholder="Name"
+        editable={isEditing}
+      />
+      <TextInput
+        style={styles.input}
+        value={email}
+        onChangeText={setEmail}
+        placeholder="Email"
+        keyboardType="email-address"
+        editable={isEditing}
+      />
+      <TextInput
+        style={styles.input}
+        value={college}
+        onChangeText={setCollege}
+        placeholder="College Name"
+        editable={isEditing}
+      />
+      {/* <TextInput
+        style={styles.input}
+        value={bio}
+        onChangeText={setBio}
+        placeholder="Short Bio"
+        editable={isEditing}
+      /> */}
+
+      {/* <Text style={styles.sectionTitle}>Emergency Contacts</Text>
+      <FlatList
+        data={contacts}
+        renderItem={renderContactItem}
+        keyExtractor={item => item.id}
+        style={styles.contactList}
+      /> */}
+      {/* <TouchableOpacity style={styles.button} onPress={addContact}>
+        <Text style={styles.buttonText}>Add Contact</Text>
+      </TouchableOpacity> */}
+
+      <Text style={styles.sectionTitle}>Safety Settings</Text>
+      <View style={styles.setting}>
+        <Text>Enable SOS Notifications</Text>
+        <Switch
+          value={sosEnabled}
+          onValueChange={() => setSosEnabled(previousState => !previousState)}
         />
-        <TouchableOpacity style={styles.button} onPress={addContact}>
-          <Text style={styles.buttonText}>Add Contact</Text>
+      </View>
+      <View style={styles.setting}>
+        <Text>Share Location Automatically</Text>
+        <Switch
+          value={locationSharingEnabled}
+          onValueChange={() => setLocationSharingEnabled(previousState => !previousState)}
+        />
+      </View>
+
+      {/* <Text style={styles.sectionTitle}>Hobbies & Interests</Text>
+      <TextInput
+        style={styles.input}
+        value={hobbies}
+        onChangeText={setHobbies}
+        placeholder="Hobbies, Interests"
+        editable={isEditing}
+      /> */}
+
+      {/* <Text style={styles.sectionTitle}>Recent Activities</Text>
+      <FlatList
+        data={recentActivities}
+        renderItem={renderActivityItem}
+        keyExtractor={item => item.id}
+        style={styles.activityList}
+      /> */}
+
+      {isEditing && (
+        <TouchableOpacity style={styles.saveButton} onPress={saveProfile}>
+          <Text style={styles.saveButtonText}>Save</Text>
         </TouchableOpacity>
+      )}
 
-        <Text style={styles.sectionTitle}>Safety Settings</Text>
-        <View style={styles.setting}>
-          <Text>Enable SOS Notifications</Text>
-          <Switch
-            value={sosEnabled}
-            onValueChange={() => setSosEnabled(previousState => !previousState)}
-          />
-        </View>
-        <View style={styles.setting}>
-          <Text>Share Location Automatically</Text>
-          <Switch
-            value={locationSharingEnabled}
-            onValueChange={() => setLocationSharingEnabled(previousState => !previousState)}
-          />
-        </View>
-
-        <Text style={styles.sectionTitle}>Hobbies & Interests</Text>
-        <TextInput
-          style={styles.input}
-          value={hobbies}
-          onChangeText={setHobbies}
-          placeholder="Hobbies, Interests"
-          editable={isEditing}
-        />
-
-        <Text style={styles.sectionTitle}>Recent Activities</Text>
-        <FlatList
-          data={recentActivities}
-          renderItem={renderActivityItem}
-          keyExtractor={item => item.id}
-          style={styles.activityList}
-        />
-
-        {isEditing && (
-          <TouchableOpacity style={styles.saveButton} onPress={saveProfile}>
-            <Text style={styles.saveButtonText}>Save</Text>
-          </TouchableOpacity>
-        )}
-
-        <TouchableOpacity style={styles.logoutButton} onPress={() => Alert.alert('Logged Out')}>
-          <Text style={styles.logoutButtonText}>Logout</Text>
-        </TouchableOpacity>
-      </ScrollView>
-    </SafeAreaView>
+      <TouchableOpacity style={styles.logoutButton} onPress={() => {navigation.replace('Login')}}>
+        <Text style={styles.logoutButtonText}>Logout</Text>
+      </TouchableOpacity>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#f8f9fa',
-  },
   container: {
     flex: 1,
+    backgroundColor: '#f8f9fa',
   },
   headerContainer: {
     flexDirection: 'row',
@@ -184,15 +177,14 @@ const styles = StyleSheet.create({
     height: 200,
     marginBottom: -100,
   },
-  profilePictureContainer: {
+  profilePicture: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
     alignSelf: 'center',
     marginBottom: 15,
-    width: 130,
-    height: 130,
-    borderRadius: 65,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    borderWidth: 4,
+    borderColor: '#fff',
     elevation: 5,
     shadowColor: '#000',
     shadowOffset: {
@@ -201,11 +193,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.3,
     shadowRadius: 3,
-  },
-  profilePicture: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
   },
   editButton: {
     backgroundColor: '#007BFF',
