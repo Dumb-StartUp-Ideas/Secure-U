@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, FlatList, TextInput, Alert } from 'react-native';
-import {Modal} from 'react-native-modal';
+import Modal from 'react-native-modal';
 import * as Location from 'expo-location';
 import * as SMS from 'expo-sms';
 
