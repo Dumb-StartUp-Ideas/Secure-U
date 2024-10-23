@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialIcons } from '@expo/vector-icons';
 import Octicons from '@expo/vector-icons/Octicons';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 
 // Import screens
 import LoginScreen from './screens/LoginScreen';
@@ -11,7 +12,6 @@ import DashboardScreen from './screens/owners/DashboardScreen';
 import AttendanceScreen from './screens/owners/AttendanceScreen';
 import ProfileScreen from './screens/owners/ProfileScreen';
 import HomeScreen from './screens/owners/HomeScreen';
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 
 // Import student screens
 import StudentDashboardScreen from './screens/students/DashboardScreen';
@@ -29,17 +29,17 @@ function OwnerTabNavigator() {
       <Tab.Screen
         name="Response"
         component={HomeScreen}
-        options={{ tabBarIcon: ({ color, size }) => <MaterialIcons name="home" size={size} color={color} /> }}
+        options={{ headerShown: false, tabBarIcon: ({ color, size }) => <MaterialIcons name="home" size={size} color={color} /> }}
       />
       <Tab.Screen
         name="History"
         component={DashboardScreen}
-        options={{ tabBarIcon: ({ color, size }) => <FontAwesome5 name="history" size={size} color={color} /> }}
+        options={{ headerShown: false, tabBarIcon: ({ color, size }) => <FontAwesome5 name="history" size={size} color={color} /> }}
       />
       <Tab.Screen
         name="Profile"
         component={ProfileScreen}
-        options={{ tabBarIcon: ({ color, size }) => <MaterialIcons name="person" size={size} color={color} /> }}
+        options={{ headerShown: false, tabBarIcon: ({ color, size }) => <MaterialIcons name="person" size={size} color={color} /> }}
       />
     </Tab.Navigator>
   );
@@ -52,17 +52,17 @@ function StudentTabNavigator() {
       <Tab.Screen
         name="Home"
         component={StudentHomeScreen}
-        options={{ tabBarIcon: ({ color, size }) => <MaterialIcons name="home" size={size} color={color} /> }}
+        options={{ headerShown: false, tabBarIcon: ({ color, size }) => <MaterialIcons name="home" size={size} color={color} /> }}
       />
       <Tab.Screen
         name="Forum"
         component={StudentDashboardScreen}
-        options={{ tabBarIcon: ({ color, size }) => <Octicons name="comment-discussion" size={size} color={color} /> }}
+        options={{ headerShown: false, tabBarIcon: ({ color, size }) => <Octicons name="comment-discussion" size={size} color={color} /> }}
       />
       <Tab.Screen
         name="Profile"
         component={StudentProfileScreen}
-        options={{ tabBarIcon: ({ color, size }) => <MaterialIcons name="person" size={size} color={color} /> }}
+        options={{ headerShown: false, tabBarIcon: ({ color, size }) => <MaterialIcons name="person" size={size} color={color} /> }}
       />
     </Tab.Navigator>
   );
@@ -76,11 +76,12 @@ export default function App() {
         <Stack.Screen
           name="Main"
           options={{ headerShown: false }}
-          component={({ route }) => {
+        >
+          {({ route }) => {
             const { userRole } = route.params || {};
             return userRole === 'owner' ? <OwnerTabNavigator /> : <StudentTabNavigator />;
           }}
-        />
+        </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );
