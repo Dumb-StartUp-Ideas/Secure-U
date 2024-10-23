@@ -1,10 +1,28 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, FlatList, TextInput, TouchableOpacity, Image, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, FlatList, TextInput, TouchableOpacity, Image, KeyboardAvoidingView, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
 
 // Random name generator
-const randomNames = ['MasalaMasti', 'GossipGiraffe', 'DesiDiva', 'PavBhajiPrincess', 'SareeNotSorry', '', 'GullyGirlGang', 'ChaatQueen'];
+const randomNames = ['MasalaMasti', 'GossipGiraffe', 'DesiDiva', 'PavBhajiPrincess', 'SareeNotSorry', 'GullyGirlGang', 'ChaatQueen'];
+
+// Predefined avatar URLs
+const avatarUrls = [
+  'https://randomuser.me/api/portraits/women/1.jpg',
+  'https://randomuser.me/api/portraits/women/2.jpg',
+  'https://randomuser.me/api/portraits/women/3.jpg',
+  'https://randomuser.me/api/portraits/women/4.jpg',
+  'https://randomuser.me/api/portraits/women/5.jpg',
+  'https://randomuser.me/api/portraits/women/6.jpg',
+  'https://randomuser.me/api/portraits/women/7.jpg',
+  'https://photosbook.in/wp-content/uploads/attitude-hide-face-girl-pic_33.webp',
+];
+
+// Generate random avatar URL
+const getRandomAvatar = () => {
+  const randomIndex = Math.floor(Math.random() * avatarUrls.length);
+  return avatarUrls[randomIndex];
+};
 
 const ForumScreen = () => {
   const [posts, setPosts] = useState([
@@ -18,7 +36,8 @@ const ForumScreen = () => {
         "Download safety apps like ‘SafeNow’. They can be lifesavers!",
         "Can anyone share their experiences? It helps to hear what others have gone through."
       ],
-      username: getRandomUsername(),
+      username: 'MasalaMasti',
+      avatar: 'https://photosbook.in/wp-content/uploads/attitude-hide-face-girl-pic_33.webp',
     },
     {
       id: 2,
@@ -30,7 +49,8 @@ const ForumScreen = () => {
         "Don’t forget to take breaks! Even a 5-minute stretch can reset your mind.",
         "A good playlist can be therapeutic! Share your study songs?"
       ],
-      username: getRandomUsername(),
+      username: 'GossipGiraffe',
+      avatar: 'https://randomuser.me/api/portraits/women/2.jpg',
     },
     {
       id: 3,
@@ -42,7 +62,8 @@ const ForumScreen = () => {
         "Check your college’s guidelines. They usually have specific procedures in place.",
         "Let’s create a supportive community where we can discuss our experiences openly."
       ],
-      username: getRandomUsername(),
+      username: 'DesiDiva',
+      avatar: 'https://randomuser.me/api/portraits/women/3.jpg',
     },
     {
       id: 4,
@@ -54,7 +75,8 @@ const ForumScreen = () => {
         "Self-care days are essential! Bubble baths and good books do wonders.",
         "I love painting! It helps to express and release pent-up stress."
       ],
-      username: getRandomUsername(),
+      username: 'PavBhajiPrincess',
+      avatar: 'https://randomuser.me/api/portraits/women/4.jpg',
     },
     {
       id: 5,
@@ -66,7 +88,8 @@ const ForumScreen = () => {
         "Sometimes talking to friends can help! A cup of chai and a chat can do miracles.",
         "Consider finding a mentor! Having someone who’s been through it can really guide you."
       ],
-      username: getRandomUsername(),
+      username: 'SareeNotSorry',
+      avatar: 'https://randomuser.me/api/portraits/women/5.jpg',
     },
     {
       id: 6,
@@ -78,7 +101,8 @@ const ForumScreen = () => {
         "Setting small, achievable goals each day can keep you motivated.",
         "Don't forget to prioritize! Identify your most important tasks and tackle those first."
       ],
-      username: getRandomUsername(),
+      username: 'GullyGirlGang',
+      avatar: 'https://randomuser.me/api/portraits/women/6.jpg',
     },
     {
       id: 7,
@@ -90,7 +114,8 @@ const ForumScreen = () => {
         "Always be aware of your surroundings. A strong posture can deter unwanted attention.",
         "Remember, it’s about escaping a situation, not about fighting! Focus on getting away."
       ],
-      username: getRandomUsername(),
+      username: 'ChaatQueen',
+      avatar: 'https://randomuser.me/api/portraits/women/7.jpg',
     },
   ]);
 
@@ -119,7 +144,7 @@ const ForumScreen = () => {
   // Add new post with selected label
   const addPost = () => {
     if (newPostText && selectedLabel) {
-      setPosts([...posts, { id: posts.length + 1, label: selectedLabel, text: newPostText, upvotes: 0, comments: [], username: getRandomUsername() }]);
+      setPosts([...posts, { id: posts.length + 1, label: selectedLabel, text: newPostText, upvotes: 0, comments: [], username: getRandomUsername(), avatar: 'https://randomuser.me/api/portraits/women/8.jpg' }]);
       setNewPostText('');
       setSelectedLabel('');
       setShowAddPost(false); // Hide add post fields after submission
@@ -158,7 +183,7 @@ const ForumScreen = () => {
         <Text style={styles.labelText}>{item.label}</Text>
       </View>
       <View style={styles.userInfo}>
-        <Image source={{ uri: 'https://randomuser.me/api/portraits/med/women/1.jpg' }} style={styles.profilePicture} />
+        <Image source={{ uri: item.avatar }} style={styles.profilePicture} />
         <Text style={styles.username}>{item.username}</Text>
       </View>
       <Text style={styles.postText}>{item.text}</Text>
@@ -394,7 +419,5 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
 });
-
-
 
 export default ForumScreen;

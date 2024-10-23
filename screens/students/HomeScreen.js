@@ -72,17 +72,27 @@ const HomeScreen = () => {
   // Simulate a fake call by showing the fake call modal
   const handleFakeCallPress = () => {
     setFakeCallVisible(true);
-    setTimeout(() => {
-      setFakeCallVisible(false); // Automatically dismiss fake call after 5 seconds
-    }, 5000);
+  };
+
+  // Handle ending the fake call
+  const handleEndFakeCall = () => {
+    setFakeCallVisible(false);
+  };
+
+  // Handle accepting the fake call
+  const handleAcceptFakeCall = () => {
+    Alert.alert('Call Accepted', 'You have accepted the fake call.');
+    setFakeCallVisible(false);
   };
 
   return (
     <View style={styles.container}>
       {/* SOS Button */}
-      <TouchableOpacity style={styles.sosButton} onPress={handleSOSPress}>
-        <Text style={styles.sosButtonText}>SOS</Text>
-      </TouchableOpacity>
+      <View style={styles.sosButtonContainer}>
+        <TouchableOpacity style={styles.sosButton} onPress={handleSOSPress}>
+          <Text style={styles.sosButtonText}>SOS</Text>
+        </TouchableOpacity>
+      </View>
 
       {/* Fake Call Button */}
       <TouchableOpacity style={styles.fakeCallButton} onPress={handleFakeCallPress}>
@@ -126,13 +136,18 @@ const HomeScreen = () => {
       </Modal>
 
       {/* Fake Call Modal */}
-      <Modal isVisible={isFakeCallVisible}>
+      <Modal isVisible={isFakeCallVisible} animationIn="slideInUp" animationOut="slideOutDown">
         <View style={styles.fakeCallContent}>
           <Text style={styles.fakeCallText}>Incoming Call...</Text>
           <Text style={styles.fakeCallerID}>Unknown</Text>
-          <TouchableOpacity style={styles.fakeCallEndButton} onPress={() => setFakeCallVisible(false)}>
-            <Text style={styles.fakeCallEndButtonText}>End Call</Text>
-          </TouchableOpacity>
+          <View style={styles.fakeCallButtons}>
+            <TouchableOpacity style={styles.fakeCallAcceptButton} onPress={handleAcceptFakeCall}>
+              <Text style={styles.fakeCallAcceptButtonText}>Accept</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.fakeCallEndButton} onPress={handleEndFakeCall}>
+              <Text style={styles.fakeCallEndButtonText}>Decline</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </Modal>
     </View>
@@ -143,21 +158,32 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
     backgroundColor: '#f5f5f5',
+  },
+  sosButtonContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   sosButton: {
     backgroundColor: 'red',
-    paddingVertical: 20,
-    borderRadius: 100,
+    width: 250,
+    height: 250,
+    borderRadius: 125,
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: 20,
     elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
   },
   sosButtonText: {
     color: '#fff',
-    fontSize: 24,
+    fontSize: 36,
     fontWeight: 'bold',
   },
   fakeCallButton: {
@@ -176,6 +202,7 @@ const styles = StyleSheet.create({
   },
   contactsContainer: {
     flex: 1,
+    padding: 20,
   },
   sectionTitle: {
     fontSize: 18,
@@ -245,12 +272,28 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 20,
   },
+  fakeCallButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  fakeCallAcceptButton: {
+    backgroundColor: 'green',
+    paddingVertical: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    width: '45%',
+  },
+  fakeCallAcceptButtonText: {
+    color: '#fff',
+    fontSize: 18,
+  },
   fakeCallEndButton: {
     backgroundColor: 'red',
     paddingVertical: 10,
     borderRadius: 5,
     alignItems: 'center',
-    width: '100%',
+    width: '45%',
   },
   fakeCallEndButtonText: {
     color: '#fff',
