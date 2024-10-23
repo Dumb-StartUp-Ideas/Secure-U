@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, FlatList, TextInput, TouchableOpacity, Image, KeyboardAvoidingView, Platform } from 'react-native';
+import { StyleSheet, View, Text, FlatList, TextInput, TouchableOpacity, Image, KeyboardAvoidingView, Platform, SafeAreaView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
 
@@ -8,13 +8,13 @@ const randomNames = ['MasalaMasti', 'GossipGiraffe', 'DesiDiva', 'PavBhajiPrince
 
 // Predefined avatar URLs
 const avatarUrls = [
-  'https://randomuser.me/api/portraits/women/1.jpg',
-  'https://randomuser.me/api/portraits/women/2.jpg',
-  'https://randomuser.me/api/portraits/women/3.jpg',
-  'https://randomuser.me/api/portraits/women/4.jpg',
-  'https://randomuser.me/api/portraits/women/5.jpg',
-  'https://randomuser.me/api/portraits/women/6.jpg',
-  'https://randomuser.me/api/portraits/women/7.jpg',
+  'https://i.pinimg.com/enabled_lo/564x/46/85/b8/4685b808e3fa8bd75193de888630c2cc.jpg',
+  'https://i.pinimg.com/enabled_lo/564x/21/07/fa/2107faa97e0d9ec867adbe3b9f15ec4f.jpg',
+  'https://i.pinimg.com/enabled_lo/564x/e6/0c/8f/e60c8ffef573f1c67e6b90b02c442aee.jpg',
+  'https://i.pinimg.com/enabled_lo/564x/12/92/ff/1292ff25524589cdecf5c217fd03e71f.jpg',
+  'https://i.pinimg.com/564x/6e/22/28/6e22280114e988da5687d15ad60e7bdf.jpg',
+  'https://photosbook.in/wp-content/uploads/girl-dp10.jpg',
+  'https://photosbook.in/wp-content/uploads/girl-dp89.jpg',
   'https://photosbook.in/wp-content/uploads/attitude-hide-face-girl-pic_33.webp',
 ];
 
@@ -50,7 +50,7 @@ const ForumScreen = () => {
         "A good playlist can be therapeutic! Share your study songs?"
       ],
       username: 'GossipGiraffe',
-      avatar: 'https://randomuser.me/api/portraits/women/2.jpg',
+      avatar: 'https://i.pinimg.com/enabled_lo/474x/0c/d5/9a/0cd59a8d2bb48f2e307c69d06b8f65d4.jpg',
     },
     {
       id: 3,
@@ -63,7 +63,7 @@ const ForumScreen = () => {
         "Let’s create a supportive community where we can discuss our experiences openly."
       ],
       username: 'DesiDiva',
-      avatar: 'https://randomuser.me/api/portraits/women/3.jpg',
+      avatar: 'https://i.pinimg.com/enabled_lo/564x/21/07/fa/2107faa97e0d9ec867adbe3b9f15ec4f.jpg',
     },
     {
       id: 4,
@@ -76,7 +76,7 @@ const ForumScreen = () => {
         "I love painting! It helps to express and release pent-up stress."
       ],
       username: 'PavBhajiPrincess',
-      avatar: 'https://randomuser.me/api/portraits/women/4.jpg',
+      avatar: 'https://i.pinimg.com/enabled_lo/564x/e6/0c/8f/e60c8ffef573f1c67e6b90b02c442aee.jpg',
     },
     {
       id: 5,
@@ -89,7 +89,7 @@ const ForumScreen = () => {
         "Consider finding a mentor! Having someone who’s been through it can really guide you."
       ],
       username: 'SareeNotSorry',
-      avatar: 'https://randomuser.me/api/portraits/women/5.jpg',
+      avatar: 'https://i.pinimg.com/564x/6e/22/28/6e22280114e988da5687d15ad60e7bdf.jpg',
     },
     {
       id: 6,
@@ -102,7 +102,7 @@ const ForumScreen = () => {
         "Don't forget to prioritize! Identify your most important tasks and tackle those first."
       ],
       username: 'GullyGirlGang',
-      avatar: 'https://randomuser.me/api/portraits/women/6.jpg',
+      avatar: 'https://i.pinimg.com/enabled_lo/564x/12/92/ff/1292ff25524589cdecf5c217fd03e71f.jpg',
     },
     {
       id: 7,
@@ -115,7 +115,7 @@ const ForumScreen = () => {
         "Remember, it’s about escaping a situation, not about fighting! Focus on getting away."
       ],
       username: 'ChaatQueen',
-      avatar: 'https://randomuser.me/api/portraits/women/7.jpg',
+      avatar: 'https://i.pinimg.com/736x/ad/7f/5d/ad7f5d4bb3d61aefe76bd5f06c92034d.jpg',
     },
   ]);
 
@@ -213,51 +213,57 @@ const ForumScreen = () => {
   );
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
-    >
-      <FlatList
-        data={posts}
-        renderItem={renderPost}
-        keyExtractor={(item) => item.id.toString()}
-        contentContainerStyle={styles.flatListContent}
-      />
-      <TouchableOpacity style={styles.showAddPostButton} onPress={() => setShowAddPost(!showAddPost)}>
-        <Text style={styles.showAddPostButtonText}>{showAddPost ? 'Cancel' : 'Add Post'}</Text>
-      </TouchableOpacity>
-      {showAddPost && (
-        <View style={styles.newPostContainer}>
-          <TextInput
-            placeholder="Write a post"
-            value={newPostText}
-            onChangeText={setNewPostText}
-            style={styles.newPostInput}
-          />
-          <View style={styles.pickerContainer}>
-            <Picker
-              selectedValue={selectedLabel}
-              onValueChange={(itemValue) => setSelectedLabel(itemValue)}
-              style={styles.picker}
-            >
-              <Picker.Item label="Select a label" value="" />
-              {labelOptions.map((label) => (
-                <Picker.Item key={label} label={label} value={label} />
-              ))}
-            </Picker>
+    <SafeAreaView style={styles.safeArea}>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
+      >
+        <FlatList
+          data={posts}
+          renderItem={renderPost}
+          keyExtractor={(item) => item.id.toString()}
+          contentContainerStyle={styles.flatListContent}
+        />
+        <TouchableOpacity style={styles.showAddPostButton} onPress={() => setShowAddPost(!showAddPost)}>
+          <Text style={styles.showAddPostButtonText}>{showAddPost ? 'Cancel' : 'Add Post'}</Text>
+        </TouchableOpacity>
+        {showAddPost && (
+          <View style={styles.newPostContainer}>
+            <TextInput
+              placeholder="Write a post"
+              value={newPostText}
+              onChangeText={setNewPostText}
+              style={styles.newPostInput}
+            />
+            <View style={styles.pickerContainer}>
+              <Picker
+                selectedValue={selectedLabel}
+                onValueChange={(itemValue) => setSelectedLabel(itemValue)}
+                style={styles.picker}
+              >
+                <Picker.Item label="Select a label" value="" />
+                {labelOptions.map((label) => (
+                  <Picker.Item key={label} label={label} value={label} />
+                ))}
+              </Picker>
+            </View>
+            <TouchableOpacity style={styles.addPostButton} onPress={addPost}>
+              <Text style={styles.addPostButtonText}>Submit Post</Text>
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.addPostButton} onPress={addPost}>
-            <Text style={styles.addPostButtonText}>Submit Post</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-    </KeyboardAvoidingView>
+        )}
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 
 // Styles
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+  },
   container: {
     flex: 1,
     backgroundColor: '#f8f9fa',
