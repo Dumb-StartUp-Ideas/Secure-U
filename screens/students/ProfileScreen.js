@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput, FlatList, Alert, Switch, ScrollView, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput, FlatList, Alert, Switch, ScrollView, SafeAreaView, Modal } from 'react-native';
 import { useNavigation } from '@react-navigation/native'; // For navigation
 import { Ionicons } from '@expo/vector-icons'; // For icons
 
@@ -21,9 +21,20 @@ const ProfileScreen = () => {
     { id: '2', activity: 'Volunteered at a local community center' }
   ]);
   const [isEditing, setIsEditing] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [newContactName, setNewContactName] = useState('');
+  const [newContactNumber, setNewContactNumber] = useState('');
 
+  // Add new contact to the list
   const addContact = () => {
-    Alert.alert('Add Contact', 'This feature is under construction!');
+    if (newContactName && newContactNumber) {
+      setContacts([...contacts, { id: (contacts.length + 1).toString(), name: newContactName, phone: newContactNumber }]);
+      setNewContactName('');
+      setNewContactNumber('');
+      setModalVisible(false);
+    } else {
+      Alert.alert('Invalid Input', 'Please enter a valid name and phone number');
+    }
   };
 
   const saveProfile = () => {
@@ -45,109 +56,141 @@ const ProfileScreen = () => {
     </View>
   );
 
+  const renderHeader = () => (
+    <View>
+      <View style={styles.headerContainer}>
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+          <Ionicons name="arrow-back" size={24} color="#fff" />
+        </TouchableOpacity>
+        <Text style={styles.header}>Profile</Text>
+      </View>
+
+      <Image source={{ uri: 'https://images.pexels.com/photos/1287142/pexels-photo-1287142.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' }} style={styles.coverPhoto} />
+      <View style={styles.profilePictureContainer}>
+        <Image source={{ uri: 'https://photosbook.in/wp-content/uploads/attitude-hide-face-girl-pic_33.webp' }} style={styles.profilePicture} />
+      </View>
+
+      <TouchableOpacity style={styles.editButton} onPress={() => setIsEditing(true)}>
+        <Text style={styles.editButtonText}>Edit Profile</Text>
+      </TouchableOpacity>
+
+      <TextInput
+        style={styles.input}
+        value={name}
+        onChangeText={setName}
+        placeholder="Name"
+        editable={isEditing}
+      />
+      <TextInput
+        style={styles.input}
+        value={email}
+        onChangeText={setEmail}
+        placeholder="Email"
+        keyboardType="email-address"
+        editable={isEditing}
+      />
+      <TextInput
+        style={styles.input}
+        value={college}
+        onChangeText={setCollege}
+        placeholder="College Name"
+        editable={isEditing}
+      />
+      <TextInput
+        style={styles.input}
+        value={bio}
+        onChangeText={setBio}
+        placeholder="Short Bio"
+        editable={isEditing}
+      />
+
+      <Text style={styles.sectionTitle}>Safety Settings</Text>
+      <View style={styles.setting}>
+        <Text>Enable SOS Notifications</Text>
+        <Switch
+          value={sosEnabled}
+          onValueChange={() => setSosEnabled(previousState => !previousState)}
+        />
+      </View>
+      <View style={styles.setting}>
+        <Text>Share Location Automatically</Text>
+        <Switch
+          value={locationSharingEnabled}
+          onValueChange={() => setLocationSharingEnabled(previousState => !previousState)}
+        />
+      </View>
+
+      <TextInput
+        style={styles.input}
+        value={hobbies}
+        onChangeText={setHobbies}
+        placeholder="Hobbies, Interests"
+        editable={isEditing}
+      />
+
+      <Text style={styles.sectionTitle}>Emergency Contacts</Text>
+    </View>
+  );
+
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView style={styles.container}>
-        <View style={styles.headerContainer}>
-          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-            <Ionicons name="arrow-back" size={24} color="#fff" />
-          </TouchableOpacity>
-          <Text style={styles.header}>Profile</Text>
-        </View>
+      <FlatList
+        data={contacts}
+        renderItem={renderContactItem}
+        keyExtractor={item => item.id}
+        ListHeaderComponent={renderHeader}
+        ListFooterComponent={() => (
+          <View>
+            <TouchableOpacity style={styles.button} onPress={() => setModalVisible(true)}>
+              <Text style={styles.buttonText}>Add Contact</Text>
+            </TouchableOpacity>
 
-        <Image source={{ uri: 'https://images.pexels.com/photos/1287142/pexels-photo-1287142.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' }} style={styles.coverPhoto} />
-        <View style={styles.profilePictureContainer}>
-          <Image source={{ uri: 'https://photosbook.in/wp-content/uploads/attitude-hide-face-girl-pic_33.webp' }} style={styles.profilePicture} />
-        </View>
+            <Text style={styles.sectionTitle}>Recent Activities</Text>
+            <FlatList
+              data={recentActivities}
+              renderItem={renderActivityItem}
+              keyExtractor={item => item.id}
+            />
 
-        <TouchableOpacity style={styles.editButton} onPress={() => setIsEditing(true)}>
-          <Text style={styles.editButtonText}>Edit Profile</Text>
-        </TouchableOpacity>
+            {isEditing && (
+              <TouchableOpacity style={styles.saveButton} onPress={saveProfile}>
+                <Text style={styles.saveButtonText}>Save</Text>
+              </TouchableOpacity>
+            )}
 
-        <TextInput
-          style={styles.input}
-          value={name}
-          onChangeText={setName}
-          placeholder="Name"
-          editable={isEditing}
-        />
-        <TextInput
-          style={styles.input}
-          value={email}
-          onChangeText={setEmail}
-          placeholder="Email"
-          keyboardType="email-address"
-          editable={isEditing}
-        />
-        <TextInput
-          style={styles.input}
-          value={college}
-          onChangeText={setCollege}
-          placeholder="College Name"
-          editable={isEditing}
-        />
-        <TextInput
-          style={styles.input}
-          value={bio}
-          onChangeText={setBio}
-          placeholder="Short Bio"
-          editable={isEditing}
-        />
-
-        <Text style={styles.sectionTitle}>Emergency Contacts</Text>
-        <FlatList
-          data={contacts}
-          renderItem={renderContactItem}
-          keyExtractor={item => item.id}
-          style={styles.contactList}
-        />
-        <TouchableOpacity style={styles.button} onPress={addContact}>
-          <Text style={styles.buttonText}>Add Contact</Text>
-        </TouchableOpacity>
-
-        <Text style={styles.sectionTitle}>Safety Settings</Text>
-        <View style={styles.setting}>
-          <Text>Enable SOS Notifications</Text>
-          <Switch
-            value={sosEnabled}
-            onValueChange={() => setSosEnabled(previousState => !previousState)}
-          />
-        </View>
-        <View style={styles.setting}>
-          <Text>Share Location Automatically</Text>
-          <Switch
-            value={locationSharingEnabled}
-            onValueChange={() => setLocationSharingEnabled(previousState => !previousState)}
-          />
-        </View>
-
-        <Text style={styles.sectionTitle}>Hobbies & Interests</Text>
-        <TextInput
-          style={styles.input}
-          value={hobbies}
-          onChangeText={setHobbies}
-          placeholder="Hobbies, Interests"
-          editable={isEditing}
-        />
-
-        <Text style={styles.sectionTitle}>Recent Activities</Text>
-        <FlatList
-          data={recentActivities}
-          renderItem={renderActivityItem}
-          keyExtractor={item => item.id}
-          style={styles.activityList}
-        />
-
-        {isEditing && (
-          <TouchableOpacity style={styles.saveButton} onPress={saveProfile}>
-            <Text style={styles.saveButtonText}>Save</Text>
-          </TouchableOpacity>
+            <TouchableOpacity style={styles.logoutButton} onPress={() => navigation.replace('Login')}>
+              <Text style={styles.logoutButtonText}>Logout</Text>
+            </TouchableOpacity>
+          </View>
         )}
+      />
 
-        <TouchableOpacity style={styles.logoutButton} onPress={() => Alert.alert('Logged Out')}>
-          <Text style={styles.logoutButtonText}>Logout</Text>
-        </TouchableOpacity>
-      </ScrollView>
+      {/* Add Contact Modal */}
+      <Modal visible={isModalVisible} transparent={true} animationType="slide">
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <TextInput
+              placeholder="Enter name"
+              value={newContactName}
+              onChangeText={setNewContactName}
+              style={styles.input}
+            />
+            <TextInput
+              placeholder="Enter phone number"
+              keyboardType="phone-pad"
+              value={newContactNumber}
+              onChangeText={setNewContactNumber}
+              style={styles.input}
+            />
+            <TouchableOpacity style={styles.addButton} onPress={addContact}>
+              <Text style={styles.addButtonText}>Add Contact</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.cancelButton} onPress={() => setModalVisible(false)}>
+              <Text style={styles.cancelButtonText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -315,6 +358,30 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
   logoutButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 10,
+    width: '80%',
+  },
+  cancelButton: {
+    backgroundColor: '#FF6B6B',
+    padding: 12,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  cancelButtonText: {
     color: '#fff',
     fontWeight: 'bold',
     fontSize: 16,
