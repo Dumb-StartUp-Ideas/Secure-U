@@ -3,9 +3,9 @@ import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Alert, Activity
 import * as Location from 'expo-location';
 import * as SMS from 'expo-sms';
 import ContactList from '../../components/SOSScreen/ContactList';
-import FakeCallButton from '../../components/SOSScreen/FakeCallButton';
+import LogoutButton from './FakeCallButton';
 
-const HomeScreen = () => {
+const SOSScreen = () => {
   const [contacts, setContacts] = useState([
     { id: '1', name: 'Mom', phone: '123-456-7890' },
     { id: '2', name: 'Best Friend', phone: '987-654-3210' }
@@ -69,8 +69,8 @@ const HomeScreen = () => {
             <Text style={styles.sosButtonText}>SOS</Text>
           )}
         </TouchableOpacity>
-        <ContactList contacts={contacts} setContacts={setContacts} />
-        <FakeCallButton />
+        <ContactList contacts={contacts} />
+        <LogoutButton />
       </View>
     </SafeAreaView>
   );
@@ -110,4 +110,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+export default SOSScreen;
