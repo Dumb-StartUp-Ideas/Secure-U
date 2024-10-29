@@ -31,11 +31,11 @@ function OwnerTabNavigator() {
         component={HomeScreen}
         options={{ headerShown: false, tabBarIcon: ({ color, size }) => <MaterialIcons name="home" size={size} color={color} /> }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="History"
         component={DashboardScreen}
         options={{ headerShown: false, tabBarIcon: ({ color, size }) => <FontAwesome5 name="history" size={size} color={color} /> }}
-      />
+      /> */}
       <Tab.Screen
         name="Profile"
         component={ProfileScreen}
