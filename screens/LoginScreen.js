@@ -31,7 +31,7 @@ export default function LoginScreen({ navigation }) {
             style={styles.button}
             onPress={() => navigation.replace('Main', { userRole: 'owner' })}
           >
-            <Text style={styles.buttonText}>Continue as Owner</Text>
+            <Text style={styles.buttonText}>Continue as Bodyguard</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.button}
