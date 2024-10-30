@@ -4,6 +4,7 @@ import * as Location from 'expo-location';
 import * as SMS from 'expo-sms';
 import ContactList from '../../components/SOSScreen/ContactList';
 import FakeCallButton from '../../components/SOSScreen/FakeCallButton';
+import { logUserInteraction, getRecommendations } from '../../recommendations'; // Import getRecommendations
 
 const HomeScreen = () => {
   const [contacts, setContacts] = useState([
@@ -12,6 +13,7 @@ const HomeScreen = () => {
   ]);
 
   const [loading, setLoading] = useState(false);
+  const [recommendations, setRecommendations] = useState([]); // State for recommendations
 
   useEffect(() => {
     const requestPermissions = async () => {
@@ -22,6 +24,15 @@ const HomeScreen = () => {
     };
 
     requestPermissions();
+  }, []);
+
+  // Fetch recommendations when the screen loads
+  useEffect(() => {
+    async function fetchRecommendations() {
+      const data = await getRecommendations('demo-user123'); // Replace with actual user ID if available
+      setRecommendations(data);
+    }
+    fetchRecommendations();
   }, []);
 
   const handleSOSPress = async () => {
@@ -49,6 +60,12 @@ const HomeScreen = () => {
 
       if (smsResults.result === 'sent') {
         Alert.alert('SOS sent', 'Location sent to your emergency contacts');
+
+        // Log the SOS interaction
+        await logUserInteraction('demo-user123', 'SOS', {
+          location: { latitude, longitude },
+          contactsCount: contacts.length
+        });
       } else {
         Alert.alert('Error', 'Failed to send SMS');
       }
@@ -71,6 +88,18 @@ const HomeScreen = () => {
         </TouchableOpacity>
         <ContactList contacts={contacts} setContacts={setContacts} />
         <FakeCallButton />
+        
+        {/* Displaying Recommendations */}
+        <View style={styles.recommendationsContainer}>
+          <Text style={styles.recommendationsTitle}>Recommended Content</Text>
+          {recommendations.length > 0 ? (
+            recommendations.map((item, index) => (
+              <Text key={index} style={styles.recommendationItem}>{item}</Text>
+            ))
+          ) : (
+            <Text style={styles.recommendationItem}>No recommendations available</Text>
+          )}
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -107,6 +136,18 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 36,
     fontWeight: 'bold',
+  },
+  recommendationsContainer: {
+    marginTop: 20,
+    paddingHorizontal: 10,
+  },
+  recommendationsTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  recommendationItem: {
+    fontSize: 16,
+    marginVertical: 5,
   },
 });
 
