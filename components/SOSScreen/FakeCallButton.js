@@ -3,50 +3,68 @@ import { View, Text, TouchableOpacity, StyleSheet, Modal, Image, Vibration } fro
 
 const FakeCallButton = () => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [isVibrating, setIsVibrating] = useState(false);
 
   const handleFakeCallPress = () => {
     setModalVisible(true);
-    Vibration.vibrate([500, 500, 500]); // Vibration pattern
-    setTimeout(() => {
-      setModalVisible(false);
-    }, 5000); // Simulate a 5-second call
+    setIsVibrating(true);
   };
 
+  const stopCall = () => {
+    setModalVisible(false);
+    setIsVibrating(false);
+    Vibration.cancel();
+  };
+
+  useEffect(() => {
+    if (isVibrating) {
+      const intervalId = setInterval(() => {
+        Vibration.vibrate([500, 500, 500]);
+      }, 1500);
+
+      // Clear interval on cleanup when vibration stops
+      return () => clearInterval(intervalId);
+    }
+  }, [isVibrating]);
+
   return (
-    <View>
+    <View style={styles.container}>
       <TouchableOpacity style={styles.fakeCallButton} onPress={handleFakeCallPress}>
         <Text style={styles.fakeCallButtonText}>Fake Call</Text>
       </TouchableOpacity>
+
       <Modal
         animationType="slide"
         transparent={true}
         visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
+        onRequestClose={() => stopCall()}
       >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
+        <View style={styles.fullScreenContainer}>
+          <View style={styles.callerInfoContainer}>
             <Image
               source={{ uri: 'https://randomuser.me/api/portraits/women/44.jpg' }}
               style={styles.callerImage}
             />
-            <Text style={styles.modalTitle}>Incoming Call...</Text>
-            <Text style={styles.modalCaller}>Unknown</Text>
-            <View style={styles.callButtonsContainer}>
-              <TouchableOpacity style={styles.acceptCallButton} onPress={() => setModalVisible(false)}>
-                <Image
-                  source={{ uri: 'https://img.icons8.com/color/48/000000/phone.png' }}
-                  style={styles.callButtonIcon}
-                />
-                <Text style={styles.acceptCallButtonText}>Accept</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.declineCallButton} onPress={() => setModalVisible(false)}>
-                <Image
-                  source={{ uri: 'https://img.icons8.com/color/48/000000/end-call.png' }}
-                  style={styles.callButtonIcon}
-                />
-                <Text style={styles.declineCallButtonText}>Decline</Text>
-              </TouchableOpacity>
-            </View>
+            <Text style={styles.callerName}>Incoming Call...</Text>
+            <Text style={styles.callerId}>Unknown</Text>
+          </View>
+
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.acceptButton} onPress={() => stopCall()}>
+              <Image
+                source={{ uri: 'https://img.icons8.com/color/48/000000/phone.png' }}
+                style={styles.buttonIcon}
+              />
+              <Text style={styles.buttonText}>Accept</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.declineButton} onPress={() => stopCall()}>
+              <Image
+                source={{ uri: 'https://img.icons8.com/color/48/000000/end-call.png' }}
+                style={styles.buttonIcon}
+              />
+              <Text style={styles.buttonText}>Decline</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>
@@ -55,6 +73,11 @@ const FakeCallButton = () => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   fakeCallButton: {
     backgroundColor: '#FF6B6B',
     paddingVertical: 15,
@@ -63,80 +86,66 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 20,
     elevation: 5,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
   },
   fakeCallButtonText: {
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
   },
-  modalContainer: {
+  fullScreenContainer: {
     flex: 1,
+    backgroundColor: '#000',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
-  modalContent: {
-    backgroundColor: '#fff',
-    padding: 20,
-    borderRadius: 10,
-    width: '80%',
+  callerInfoContainer: {
     alignItems: 'center',
+    marginBottom: 40,
   },
   callerImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 120,
+    height: 120,
+    borderRadius: 60,
     marginBottom: 20,
   },
-  modalTitle: {
-    fontSize: 24,
+  callerName: {
+    fontSize: 28,
     fontWeight: 'bold',
-    marginBottom: 10,
+    color: '#fff',
   },
-  modalCaller: {
+  callerId: {
     fontSize: 18,
-    marginBottom: 20,
+    color: '#bbb',
   },
-  callButtonsContainer: {
+  buttonContainer: {
     flexDirection: 'row',
+    width: '80%',
     justifyContent: 'space-between',
-    width: '100%',
   },
-  acceptCallButton: {
+  acceptButton: {
     backgroundColor: 'green',
-    padding: 15,
+    paddingVertical: 10,
+    paddingHorizontal: 25,
     borderRadius: 50,
-    alignItems: 'center',
-    width: '45%',
     flexDirection: 'row',
-    justifyContent: 'center',
+    alignItems: 'center',
   },
-  acceptCallButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    marginLeft: 10,
-  },
-  declineCallButton: {
+  declineButton: {
     backgroundColor: 'red',
-    padding: 15,
+    paddingVertical: 10,
+    paddingHorizontal: 25,
     borderRadius: 50,
-    alignItems: 'center',
-    width: '45%',
     flexDirection: 'row',
-    justifyContent: 'center',
+    alignItems: 'center',
   },
-  declineCallButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    marginLeft: 10,
-  },
-  callButtonIcon: {
+  buttonIcon: {
     width: 24,
     height: 24,
+    marginRight: 10,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
   },
 });
 
