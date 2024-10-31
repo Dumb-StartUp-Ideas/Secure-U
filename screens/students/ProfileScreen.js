@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput, FlatList, Alert, Switch } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput, FlatList, Alert, Switch, Button } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -33,6 +33,10 @@ const ProfileScreen = () => {
     ]);
   };
 
+  const deleteContact = (contactId) => {
+    setContacts((prevContacts) => prevContacts.filter(contact => contact.id !== contactId));
+  };
+
   const openAddContactScreen = () => {
     navigation.navigate('AddContact', { addContact });
   };
@@ -44,8 +48,13 @@ const ProfileScreen = () => {
 
   const renderContactItem = ({ item }) => (
     <View style={styles.contactItem}>
-      <Text style={styles.contactName}>{item.name}:</Text>
-      <Text style={styles.contactPhone}>{item.phone}</Text>
+      <View style={styles.contactDetails}>
+        <Text style={styles.contactName}>{item.name}:</Text>
+        <Text style={styles.contactPhone}>{item.phone}</Text>
+      </View>
+      <TouchableOpacity style={styles.deleteButton} onPress={() => deleteContact(item.id)}>
+        <Text style={styles.deleteButtonText}>Delete</Text>
+      </TouchableOpacity>
     </View>
   );
 
@@ -252,10 +261,14 @@ const styles = StyleSheet.create({
   contactItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
     marginHorizontal: 20,
+  },
+  contactDetails: {
+    flexDirection: 'column',
   },
   contactName: {
     fontWeight: 'bold',
@@ -277,6 +290,19 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
     fontSize: 16,
+  },
+  deleteButton: {
+    backgroundColor: '#FF6B6B',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 5,
+    marginLeft: 10,
+  },
+  deleteButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
   },
   setting: {
     flexDirection: 'row',
