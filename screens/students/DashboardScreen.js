@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, FlatList, TextInput, TouchableOpacity, Image, KeyboardAvoidingView, Platform, SafeAreaView, Animated, Easing } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
+import { fetchComments, addComment } from '/Users/mehulpardeshi/Desktop/SecureU/supabaseClient.js';
 
 // Random name generator
 const randomNames = ['MasalaMasti', 'GossipGiraffe', 'DesiDiva', 'PavBhajiPrincess', 'SareeNotSorry', 'GullyGirlGang', 'ChaatQueen'];
@@ -42,39 +43,25 @@ const ForumScreen = () => {
       label: 'Safety',
       text: 'What should I do if I feel unsafe?',
       upvotes: 5,
-      comments: [
-        "Trust your instincts! Always have a buddy system. If you're alone, stay in well-lit areas.",
-        "Download safety apps like ‘SafeNow’. They can be lifesavers!",
-        "Can anyone share their experiences? It helps to hear what others have gone through."
-      ],
+      comments: [],
       username: 'MasalaMasti',
       avatar: getRandomAvatar(),
     },
-
     {
       id: 2,
       label: 'Health',
       text: 'Best ways to maintain mental health during exams?',
       upvotes: 12,
-      comments: [
-        "Meditation has been a game changer for me! Just 10 minutes a day can help.",
-        "Don’t forget to take breaks! Even a 5-minute stretch can reset your mind.",
-        "A good playlist can be therapeutic! Share your study songs?"
-      ],
+      comments: [],
       username: 'GossipGiraffe',
-      avatar: 'https://i.pinimg.com/enabled_lo/474x/0c/d5/9a/0cd59a8d2bb48f2e307c69d06b8f65d4.jpg',
+      avatar: getRandomAvatar(),
     },
-
     {
       id: 3,
       label: 'Harassment',
       text: 'What are my options if I experience harassment?',
       upvotes: 8,
-      comments: [
-        "Talk to someone you trust about it; don't keep it bottled up.",
-        "Check if your campus has resources or a counselor you can speak to.",
-        "You're not alone; many others have experienced this too."
-      ],
+      comments: [],
       username: 'BraveSoul',
       avatar: getRandomAvatar(),
     },
@@ -83,11 +70,7 @@ const ForumScreen = () => {
       label: 'Wellness',
       text: 'Any tips for managing stress?',
       upvotes: 15,
-      comments: [
-        "Daily journaling really helps to clear the mind.",
-        "Go for a walk or do some light stretching!",
-        "Try practicing mindfulness or breathing exercises."
-      ],
+      comments: [],
       username: 'ZenGuru',
       avatar: getRandomAvatar(),
     },
@@ -96,11 +79,7 @@ const ForumScreen = () => {
       label: 'Support',
       text: 'How can I support a friend going through a tough time?',
       upvotes: 10,
-      comments: [
-        "Just be there to listen without judgment.",
-        "Sometimes a simple message saying you care means a lot.",
-        "Offer to go for coffee or a walk together."
-      ],
+      comments: [],
       username: 'HelpingHand',
       avatar: getRandomAvatar(),
     },
@@ -109,11 +88,7 @@ const ForumScreen = () => {
       label: 'Study Tips',
       text: 'What are some good study techniques?',
       upvotes: 20,
-      comments: [
-        "Try the Pomodoro technique; it really helps with focus.",
-        "Break down complex topics into simpler parts.",
-        "Make sure to take regular breaks to avoid burnout."
-      ],
+      comments: [],
       username: 'StudyMaster',
       avatar: getRandomAvatar(),
     },
@@ -122,11 +97,7 @@ const ForumScreen = () => {
       label: 'Self-defense',
       text: 'What are some essential self-defense tips?',
       upvotes: 25,
-      comments: [
-        "Stay aware of your surroundings at all times.",
-        "Keep some self-defense tools like pepper spray.",
-        "Remember, it’s better to escape than to engage."
-      ],
+      comments: [],
       username: 'StreetSmart',
       avatar: getRandomAvatar(),
     },
@@ -135,11 +106,7 @@ const ForumScreen = () => {
       label: 'Health',
       text: 'How can I improve my sleep quality?',
       upvotes: 18,
-      comments: [
-        "Try to go to bed and wake up at the same time daily.",
-        "Avoid screens an hour before bed, it really helps.",
-        "Chamomile tea can be very calming before sleep."
-      ],
+      comments: [],
       username: 'SleepyHead',
       avatar: getRandomAvatar(),
     },
@@ -148,11 +115,7 @@ const ForumScreen = () => {
       label: 'Safety',
       text: 'How can I feel safer when walking alone at night?',
       upvotes: 30,
-      comments: [
-        "Always let someone know where you are going.",
-        "Stick to well-lit and populated areas.",
-        "Carry a personal safety alarm or a whistle."
-      ],
+      comments: [],
       username: 'NightWalker',
       avatar: getRandomAvatar(),
     },
@@ -161,48 +124,18 @@ const ForumScreen = () => {
       label: 'Wellness',
       text: 'What are good ways to relax after a stressful day?',
       upvotes: 12,
-      comments: [
-        "A warm bath and some soft music work wonders.",
-        "Spend time with a pet or loved one.",
-        "Read a book or engage in a creative hobby."
-      ],
+      comments: [],
       username: 'ChillVibes',
       avatar: getRandomAvatar(),
     },
-    {
-      id: 11,
-      label: 'Support',
-      text: 'Where can I find resources for mental health support?',
-      upvotes: 22,
-      comments: [
-        "Many campuses have free counseling services.",
-        "Check out online platforms like BetterHelp or Talkspace.",
-        "Don’t hesitate to reach out; there’s help available."
-      ],
-      username: 'MindfulBuddy',
-      avatar: getRandomAvatar(),
-    },
-    {
-      id: 12,
-      label: 'Study Tips',
-      text: 'Any suggestions for staying organized during the semester??',
-      upvotes: 14,
-      comments: [
-        "Use a planner to jot down all your assignments and deadlines.",
-        "Set aside some time each week to review your progress and adjust your goals.",
-        "Declutter your study space often for a clear mind!"
-      ],
-      username: 'FocusedFox',
-      avatar: getRandomAvatar(),
-    }
     
-    // Add other predefined posts as needed
+    // Additional posts can be added here
   ]);
 
   const [showAddPost, setShowAddPost] = useState(false);
   const [newPostText, setNewPostText] = useState('');
   const [selectedLabel, setSelectedLabel] = useState('');
-  const [newComment, setNewComment] = useState('');
+  const [newComments, setNewComments] = useState({}); // Track new comments per post
   const animatedValue = useState(new Animated.Value(0))[0];
 
   const toggleAddPost = () => {
@@ -225,7 +158,6 @@ const ForumScreen = () => {
     outputRange: [0, 1],
   });
 
-  // Add new post function
   const addPost = () => {
     if (newPostText && selectedLabel) {
       const newPost = {
@@ -240,13 +172,37 @@ const ForumScreen = () => {
       setPosts([...posts, newPost]);
       setNewPostText('');
       setSelectedLabel('');
-      toggleAddPost(); // Close the add post form after submission
+      toggleAddPost();
+    }
+  };
+
+  // Update newComments for a specific post
+  const handleCommentChange = (postId, text) => {
+    setNewComments({ ...newComments, [postId]: text });
+  };
+
+  const handleAddComment = async (postId) => {
+    const commentText = newComments[postId]; // Get the comment for this specific post
+
+    if (commentText) {
+      const post = posts.find((p) => p.id === postId);
+      const newCommentData = await addComment(postId, post.username, post.avatar, commentText);
+
+      if (newCommentData) {
+        setPosts((prevPosts) =>
+          prevPosts.map((p) =>
+            p.id === postId ? { ...p, comments: [...p.comments, newCommentData[0]] } : p
+          )
+        );
+
+        // Clear the comment input for this post
+        setNewComments({ ...newComments, [postId]: '' });
+      }
     }
   };
 
   const renderPost = ({ item }) => (
     <View style={styles.postItem}>
-      {/* Label with colored background */}
       <View style={[styles.labelContainer, { backgroundColor: labelColors[item.label] || '#ddd' }]}>
         <Text style={styles.labelText}>{item.label}</Text>
       </View>
@@ -261,9 +217,26 @@ const ForumScreen = () => {
         </TouchableOpacity>
         <Text style={styles.upvoteText}>{item.upvotes} Upvotes</Text>
       </View>
+
+      {/* Comments Section */}
+      <FlatList
+        data={item.comments}
+        renderItem={({ item }) => <Text style={styles.comment}>{item.comment_text}</Text>}
+        keyExtractor={(item) => item.id.toString()}
+      />
+      
+      {/* Comment Input */}
+      <TextInput
+        placeholder="Add a comment..."
+        value={newComments[item.id] || ''} // Individual comment for each post
+        onChangeText={(text) => handleCommentChange(item.id, text)}
+        style={styles.commentInput}
+      />
+      <TouchableOpacity onPress={() => handleAddComment(item.id)}>
+        <Text style={styles.commentButton}>Post Comment</Text>
+      </TouchableOpacity>
     </View>
   );
-  
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -279,12 +252,10 @@ const ForumScreen = () => {
           contentContainerStyle={styles.flatListContent}
         />
 
-        {/* Floating Action Button */}
         <TouchableOpacity style={styles.fab} onPress={toggleAddPost}>
           <Ionicons name="add" size={24} color="white" />
         </TouchableOpacity>
 
-        {/* Animated Add Post Form */}
         <Animated.View style={[styles.newPostContainer, { height: formHeight, opacity }]}>
           {showAddPost && (
             <View>
@@ -319,7 +290,6 @@ const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: '#f5f5f5' },
   container: { flex: 1, backgroundColor: '#f8f9fa', padding: 20 },
   flatListContent: { paddingBottom: 100 },
-
   labelContainer: {
     paddingHorizontal: 10,
     paddingVertical: 5,
@@ -331,7 +301,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
   },
-
   postItem: {
     backgroundColor: '#fff',
     padding: 15,
@@ -343,15 +312,29 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 1.5,
   },
-  label: { fontWeight: 'bold', color: '#333' },
   userInfo: { flexDirection: 'row', alignItems: 'center' },
   profilePicture: { width: 40, height: 40, borderRadius: 20, marginRight: 10 },
   username: { fontWeight: 'bold', color: '#333' },
   postText: { marginVertical: 10, color: '#555' },
   postFooter: { flexDirection: 'row', alignItems: 'center' },
   upvoteText: { marginLeft: 10, color: 'gray' },
-
-  // Floating Action Button style
+  commentInput: {
+    borderColor: '#ddd',
+    borderWidth: 1,
+    padding: 8,
+    borderRadius: 5,
+    marginTop: 10,
+    backgroundColor: '#fff',
+  },
+  commentButton: {
+    color: '#007BFF',
+    fontWeight: 'bold',
+    marginTop: 5,
+  },
+  comment: {
+    color: '#555',
+    marginTop: 5,
+  },
   fab: {
     position: 'absolute',
     right: 20,
@@ -364,8 +347,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     elevation: 5,
   },
-
-  // Animated Add Post form styles
   newPostContainer: {
     position: 'absolute',
     bottom: 80,
