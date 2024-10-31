@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Alert, ActivityIndicator, Button } from 'react-native';
 import * as Location from 'expo-location';
 import * as SMS from 'expo-sms';
 import ContactList from '../../components/SOSScreen/ContactList';
 import FakeCallButton from '../../components/SOSScreen/FakeCallButton';
 import { logUserInteraction, getRecommendations } from '../../recommendations'; // Import getRecommendations
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   const [contacts, setContacts] = useState([
     { id: '1', name: 'Mom', phone: '123-456-7890' },
     { id: '2', name: 'Best Friend', phone: '987-654-3210' }
@@ -89,6 +89,12 @@ const HomeScreen = () => {
         <ContactList contacts={contacts} setContacts={setContacts} />
         <FakeCallButton />
         
+        {/* Button to navigate to Fake Call Settings */}
+        <Button 
+          title="Fake Call Settings" 
+          onPress={() => navigation.navigate('FakeCallSettings')} 
+        />
+
         {/* Displaying Recommendations */}
         <View style={styles.recommendationsContainer}>
           <Text style={styles.recommendationsTitle}>Recommended Content</Text>

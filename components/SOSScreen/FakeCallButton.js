@@ -1,11 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Modal, Image, Vibration } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const FakeCallButton = () => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [callerImage, setCallerImage] = useState(null);
   const [isVibrating, setIsVibrating] = useState(false);
 
-  const handleFakeCallPress = () => {
+  // Function to load the caller image from AsyncStorage
+  const loadCallerImage = async () => {
+    try {
+      const savedImage = await AsyncStorage.getItem('fakeCallImage');
+      if (savedImage) {
+        setCallerImage({ uri: savedImage });
+      }
+    } catch (error) {
+      console.error("Failed to load caller image", error);
+    }
+  };
+
+  useEffect(() => {
+    // Load the image initially when the component mounts
+    loadCallerImage();
+  }, []);
+
+  const handleFakeCallPress = async () => {
+    // Reload the image from AsyncStorage every time the fake call is pressed
+    await loadCallerImage();
     setModalVisible(true);
     setIsVibrating(true);
   };
@@ -41,10 +62,14 @@ const FakeCallButton = () => {
       >
         <View style={styles.fullScreenContainer}>
           <View style={styles.callerInfoContainer}>
-            <Image
-              source={{ uri: 'https://randomuser.me/api/portraits/women/44.jpg' }}
-              style={styles.callerImage}
-            />
+            {callerImage ? (
+              <Image source={callerImage} style={styles.callerImage} />
+            ) : (
+              <Image
+                source={{ uri: 'https://randomuser.me/api/portraits/women/44.jpg' }}
+                style={styles.callerImage}
+              />
+            )}
             <Text style={styles.callerName}>Incoming Call...</Text>
             <Text style={styles.callerId}>Unknown</Text>
           </View>
