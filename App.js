@@ -8,42 +8,17 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 
 // Import screens
 import LoginScreen from './screens/LoginScreen';
-import DashboardScreen from './screens/owners/DashboardScreen';
-import AttendanceScreen from './screens/owners/AttendanceScreen';
 import ProfileScreen from './screens/owners/ProfileScreen';
 import HomeScreen from './screens/owners/HomeScreen';
 
 // Import student screens
 import StudentDashboardScreen from './screens/students/DashboardScreen';
-import StudentAttendanceScreen from './screens/students/AttendanceScreen';
 import StudentProfileScreen from './screens/students/ProfileScreen';
 import StudentHomeScreen from './screens/students/HomeScreen';
+import FakeCallSettings from './screens/students/FakeCallSettings';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
-
-// Define Owner Tab Navigator
-function OwnerTabNavigator() {
-  return (
-    <Tab.Navigator>
-      <Tab.Screen
-        name="Response"
-        component={HomeScreen}
-        options={{ headerShown: false, tabBarIcon: ({ color, size }) => <MaterialIcons name="home" size={size} color={color} /> }}
-      />
-      {/* <Tab.Screen
-        name="History"
-        component={DashboardScreen}
-        options={{ headerShown: false, tabBarIcon: ({ color, size }) => <FontAwesome5 name="history" size={size} color={color} /> }}
-      /> */}
-      <Tab.Screen
-        name="Profile"
-        component={ProfileScreen}
-        options={{ headerShown: false, tabBarIcon: ({ color, size }) => <MaterialIcons name="person" size={size} color={color} /> }}
-      />
-    </Tab.Navigator>
-  );
-}
 
 // Define Student Tab Navigator
 function StudentTabNavigator() {
@@ -68,6 +43,16 @@ function StudentTabNavigator() {
   );
 }
 
+// Wrap Student Tab Navigator in a Stack Navigator to Include FakeCallSettings
+function StudentStackNavigator() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="StudentTabs" component={StudentTabNavigator} options={{ headerShown: false }} />
+      <Stack.Screen name="FakeCallSettings" component={FakeCallSettings} options={{ title: 'Fake Call Settings' }} />
+    </Stack.Navigator>
+  );
+}
+
 export default function App() {
   return (
     <NavigationContainer>
@@ -79,7 +64,7 @@ export default function App() {
         >
           {({ route }) => {
             const { userRole } = route.params || {};
-            return userRole === 'owner' ? <OwnerTabNavigator /> : <StudentTabNavigator />;
+            return userRole === 'owner' ? <OwnerTabNavigator /> : <StudentStackNavigator />;
           }}
         </Stack.Screen>
       </Stack.Navigator>
