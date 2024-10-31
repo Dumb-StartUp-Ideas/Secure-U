@@ -185,16 +185,17 @@ const ForumScreen = () => {
     {
       id: 12,
       label: 'Study Tips',
-      text: 'How do I stay motivated to study consistently?',
+      text: 'Any suggestions for staying organized during the semester??',
       upvotes: 14,
       comments: [
-        "Set small, achievable goals and reward yourself.",
-        "Make a study schedule and stick to it.",
-        "Remember why you started and focus on your goals."
+        "Use a planner to jot down all your assignments and deadlines.",
+        "Set aside some time each week to review your progress and adjust your goals.",
+        "Declutter your study space often for a clear mind!"
       ],
       username: 'FocusedFox',
       avatar: getRandomAvatar(),
     }
+    
     // Add other predefined posts as needed
   ]);
 
