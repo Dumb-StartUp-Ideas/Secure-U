@@ -1,9 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, Animated, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Animated, Easing, Image, SafeAreaView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
+const { width, height } = Dimensions.get('window');
+
 export default function LoginScreen({ navigation }) {
-  const fadeAnim = new Animated.Value(0);
+  const fadeAnim = React.useRef(new Animated.Value(0)).current;
+  const scaleAnim = React.useRef(new Animated.Value(0.8)).current;
 
   React.useEffect(() => {
     Animated.timing(fadeAnim, {
@@ -11,108 +14,136 @@ export default function LoginScreen({ navigation }) {
       duration: 2000,
       useNativeDriver: true,
     }).start();
+
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(scaleAnim, {
+          toValue: 1,
+          duration: 1000,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+        Animated.timing(scaleAnim, {
+          toValue: 0.9,
+          duration: 1000,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
   }, []);
 
   return (
-    <ImageBackground
-      source={{ uri: 'https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0' }}
-      style={styles.background}
-    >
+    <SafeAreaView style={{ flex: 1 }}>
       <LinearGradient
-        colors={['rgba(0,0,0,0.8)', 'rgba(0,0,0,0.6)', 'rgba(0,0,0,0.4)', 'rgba(0,0,0,0.2)']}
-        style={styles.overlay}
+        colors={['#FEF9EF', '#FF9292', '#FF6B6B']}
+        style={StyleSheet.absoluteFillObject}
       >
+        {/* Decorative graphics for background */}
+        <View style={styles.overlayGraphics}>
+          <Image source={{ uri: 'https://your-graphic-url.com/background.png' }} style={styles.backgroundGraphic} />
+        </View>
+
         <Animated.View style={{ ...styles.animatedView, opacity: fadeAnim }}>
-          <Image source={{ uri: 'https://your-logo-url.com/logo.png' }} style={styles.logo} />
+          {/* Shield Icon with Scale Animation */}
+          <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
+            <Image
+              source={{ uri: 'https://your-shield-icon-url.com/shield.png' }}
+              style={styles.icon}
+              resizeMode="contain"
+            />
+          </Animated.View>
           <Text style={styles.appName}>SecureU</Text>
           <Text style={styles.tagline}>Your Guardian Angel</Text>
-          <Text style={styles.title}>Select Your Role</Text>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.replace('Main', { userRole: 'owner' })}
-          >
-            <Text style={styles.buttonText}>Continue as Bodyguard</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.replace('Main', { userRole: 'student' })}
-          >
-            <Text style={styles.buttonText}>Continue as Student</Text>
-          </TouchableOpacity>
+
+          {/* Role Selection Buttons */}
+          <View style={styles.optionsContainer}>
+            <TouchableOpacity
+              style={styles.optionButton}
+              onPress={() => navigation.replace('Main', { userRole: 'owner' })}
+            >
+              <Text style={styles.buttonText}>Continue as Bodyguard</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.optionButton}
+              onPress={() => navigation.replace('Main', { userRole: 'student' })}
+            >
+              <Text style={styles.buttonText}>Continue as Student</Text>
+            </TouchableOpacity>
+          </View>
         </Animated.View>
       </LinearGradient>
-    </ImageBackground>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  background: {
+  container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
-  overlay: {
-    flex: 1,
-    justifyContent: 'center',
+  overlayGraphics: {
+    ...StyleSheet.absoluteFillObject,
     alignItems: 'center',
-    width: '100%',
-    paddingHorizontal: 20,
+    justifyContent: 'center',
+    opacity: 0.1,
+  },
+  backgroundGraphic: {
+    width: width * 1.5,
+    height: height * 1.5,
+    position: 'absolute',
   },
   animatedView: {
     alignItems: 'center',
+    paddingHorizontal: 20,
+    zIndex: 1,
   },
-  logo: {
-    width: 100,
-    height: 100,
+  icon: {
+    width: 90,
+    height: 90,
     marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 10,
+    elevation: 10,
   },
   appName: {
-    fontSize: 48,
-    color: '#fff',
-    marginBottom: 10,
-    textAlign: 'center',
-    fontWeight: 'bold',
-    textShadowColor: 'rgba(0, 0, 0, 0.75)',
-    textShadowOffset: { width: -1, height: 1 },
-    textShadowRadius: 10,
+    fontSize: 40,
+    color: '#333333',
+    fontWeight: '700',
+    marginBottom: 5,
+    fontFamily: 'sans-serif-medium',
   },
   tagline: {
-    fontSize: 24,
-    color: '#fff',
+    fontSize: 18,
+    color: '#333333',
+    opacity: 0.75,
     marginBottom: 40,
-    textAlign: 'center',
-    fontStyle: 'italic',
-    textShadowColor: 'rgba(0, 0, 0, 0.75)',
-    textShadowOffset: { width: -1, height: 1 },
-    textShadowRadius: 10,
+    fontFamily: 'sans-serif-light',
   },
-  title: {
-    fontSize: 28,
-    color: '#fff',
-    marginBottom: 40,
-    textAlign: 'center',
-    fontWeight: 'bold',
-    textShadowColor: 'rgba(0, 0, 0, 0.75)',
-    textShadowOffset: { width: -1, height: 1 },
-    textShadowRadius: 10,
+  optionsContainer: {
+    width: '100%',
+    alignItems: 'center',
   },
-  button: {
-    backgroundColor: '#FF6B6B',
+  optionButton: {
+    backgroundColor: '#292929',
     paddingVertical: 15,
-    paddingHorizontal: 30,
-    borderRadius: 25,
+    paddingHorizontal: 40,
+    borderRadius: 30,
     marginVertical: 10,
-    width: '80%',
+    width: '85%',
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    elevation: 5,
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 7,
   },
   buttonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontFamily: 'sans-serif-medium',
+    fontWeight: '600',
+    letterSpacing: 1,
   },
 });
