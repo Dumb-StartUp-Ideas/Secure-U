@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, FlatList, TextInput, TouchableOpacity, Image, KeyboardAvoidingView, Platform, SafeAreaView } from 'react-native';
+import { StyleSheet, View, Text, FlatList, TextInput, TouchableOpacity, Image, KeyboardAvoidingView, Platform, SafeAreaView, Animated, Easing } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
 
@@ -11,7 +11,7 @@ const avatarUrls = [
   'https://i.pinimg.com/enabled_lo/564x/46/85/b8/4685b808e3fa8bd75193de888630c2cc.jpg',
   'https://i.pinimg.com/enabled_lo/564x/21/07/fa/2107faa97e0d9ec867adbe3b9f15ec4f.jpg',
   'https://i.pinimg.com/enabled_lo/564x/e6/0c/8f/e60c8ffef573f1c67e6b90b02c442aee.jpg',
-  'https://i.pinimg.com/enabled_lo/564x/12/92/ff/1292ff25524589cdecf5c217fd03e71f.jpg',
+  'https://i.pinimg.com/564x/12/92/ff/1292ff25524589cdecf5c217fd03e71f.jpg',
   'https://i.pinimg.com/564x/6e/22/28/6e22280114e988da5687d15ad60e7bdf.jpg',
   'https://photosbook.in/wp-content/uploads/girl-dp10.jpg',
   'https://photosbook.in/wp-content/uploads/girl-dp89.jpg',
@@ -22,6 +22,17 @@ const avatarUrls = [
 const getRandomAvatar = () => {
   const randomIndex = Math.floor(Math.random() * avatarUrls.length);
   return avatarUrls[randomIndex];
+};
+
+// Label colors for categories
+const labelColors = {
+  'Safety': '#FF6B6B',
+  'Health': '#4ECDC4',
+  'Harassment': '#F7B731',
+  'Wellness': '#A3CB38',
+  'Support': '#575FCF',
+  'Study Tips': '#F53B57',
+  'Self-defense': '#1B9CFC'
 };
 
 const ForumScreen = () => {
@@ -37,8 +48,9 @@ const ForumScreen = () => {
         "Can anyone share their experiences? It helps to hear what others have gone through."
       ],
       username: 'MasalaMasti',
-      avatar: 'https://photosbook.in/wp-content/uploads/attitude-hide-face-girl-pic_33.webp',
+      avatar: getRandomAvatar(),
     },
+
     {
       id: 2,
       label: 'Health',
@@ -52,134 +64,189 @@ const ForumScreen = () => {
       username: 'GossipGiraffe',
       avatar: 'https://i.pinimg.com/enabled_lo/474x/0c/d5/9a/0cd59a8d2bb48f2e307c69d06b8f65d4.jpg',
     },
+
     {
       id: 3,
       label: 'Harassment',
-      text: 'How do I report harassment?',
+      text: 'What are my options if I experience harassment?',
       upvotes: 8,
       comments: [
-        "It's crucial to speak up! Document everything and approach a trusted faculty member.",
-        "Check your college’s guidelines. They usually have specific procedures in place.",
-        "Let’s create a supportive community where we can discuss our experiences openly."
+        "Talk to someone you trust about it; don't keep it bottled up.",
+        "Check if your campus has resources or a counselor you can speak to.",
+        "You're not alone; many others have experienced this too."
       ],
-      username: 'DesiDiva',
-      avatar: 'https://i.pinimg.com/enabled_lo/564x/21/07/fa/2107faa97e0d9ec867adbe3b9f15ec4f.jpg',
+      username: 'BraveSoul',
+      avatar: getRandomAvatar(),
     },
     {
       id: 4,
       label: 'Wellness',
-      text: 'Any recommendations for relaxation?',
-      upvotes: 7,
+      text: 'Any tips for managing stress?',
+      upvotes: 15,
       comments: [
-        "Have you tried yoga? It’s incredibly calming!",
-        "Self-care days are essential! Bubble baths and good books do wonders.",
-        "I love painting! It helps to express and release pent-up stress."
+        "Daily journaling really helps to clear the mind.",
+        "Go for a walk or do some light stretching!",
+        "Try practicing mindfulness or breathing exercises."
       ],
-      username: 'PavBhajiPrincess',
-      avatar: 'https://i.pinimg.com/enabled_lo/564x/e6/0c/8f/e60c8ffef573f1c67e6b90b02c442aee.jpg',
+      username: 'ZenGuru',
+      avatar: getRandomAvatar(),
     },
     {
       id: 5,
       label: 'Support',
-      text: 'Who can I talk to about personal issues?',
+      text: 'How can I support a friend going through a tough time?',
       upvotes: 10,
       comments: [
-        "Counseling services are often free on campus! Don't hesitate to reach out.",
-        "Sometimes talking to friends can help! A cup of chai and a chat can do miracles.",
-        "Consider finding a mentor! Having someone who’s been through it can really guide you."
+        "Just be there to listen without judgment.",
+        "Sometimes a simple message saying you care means a lot.",
+        "Offer to go for coffee or a walk together."
       ],
-      username: 'SareeNotSorry',
-      avatar: 'https://i.pinimg.com/564x/6e/22/28/6e22280114e988da5687d15ad60e7bdf.jpg',
+      username: 'HelpingHand',
+      avatar: getRandomAvatar(),
     },
     {
       id: 6,
       label: 'Study Tips',
-      text: 'Best time management tips for students?',
-      upvotes: 15,
+      text: 'What are some good study techniques?',
+      upvotes: 20,
       comments: [
-        "Try the Pomodoro technique! It’s super effective for keeping focused.",
-        "Setting small, achievable goals each day can keep you motivated.",
-        "Don't forget to prioritize! Identify your most important tasks and tackle those first."
+        "Try the Pomodoro technique; it really helps with focus.",
+        "Break down complex topics into simpler parts.",
+        "Make sure to take regular breaks to avoid burnout."
       ],
-      username: 'GullyGirlGang',
-      avatar: 'https://i.pinimg.com/enabled_lo/564x/12/92/ff/1292ff25524589cdecf5c217fd03e71f.jpg',
+      username: 'StudyMaster',
+      avatar: getRandomAvatar(),
     },
     {
       id: 7,
       label: 'Self-defense',
-      text: 'Any tips on self-defense?',
+      text: 'What are some essential self-defense tips?',
+      upvotes: 25,
+      comments: [
+        "Stay aware of your surroundings at all times.",
+        "Keep some self-defense tools like pepper spray.",
+        "Remember, it’s better to escape than to engage."
+      ],
+      username: 'StreetSmart',
+      avatar: getRandomAvatar(),
+    },
+    {
+      id: 8,
+      label: 'Health',
+      text: 'How can I improve my sleep quality?',
       upvotes: 18,
       comments: [
-        "Taking self-defense classes can boost your confidence and teach you valuable skills.",
-        "Always be aware of your surroundings. A strong posture can deter unwanted attention.",
-        "Remember, it’s about escaping a situation, not about fighting! Focus on getting away."
+        "Try to go to bed and wake up at the same time daily.",
+        "Avoid screens an hour before bed, it really helps.",
+        "Chamomile tea can be very calming before sleep."
       ],
-      username: 'ChaatQueen',
-      avatar: 'https://i.pinimg.com/736x/ad/7f/5d/ad7f5d4bb3d61aefe76bd5f06c92034d.jpg',
+      username: 'SleepyHead',
+      avatar: getRandomAvatar(),
     },
+    {
+      id: 9,
+      label: 'Safety',
+      text: 'How can I feel safer when walking alone at night?',
+      upvotes: 30,
+      comments: [
+        "Always let someone know where you are going.",
+        "Stick to well-lit and populated areas.",
+        "Carry a personal safety alarm or a whistle."
+      ],
+      username: 'NightWalker',
+      avatar: getRandomAvatar(),
+    },
+    {
+      id: 10,
+      label: 'Wellness',
+      text: 'What are good ways to relax after a stressful day?',
+      upvotes: 12,
+      comments: [
+        "A warm bath and some soft music work wonders.",
+        "Spend time with a pet or loved one.",
+        "Read a book or engage in a creative hobby."
+      ],
+      username: 'ChillVibes',
+      avatar: getRandomAvatar(),
+    },
+    {
+      id: 11,
+      label: 'Support',
+      text: 'Where can I find resources for mental health support?',
+      upvotes: 22,
+      comments: [
+        "Many campuses have free counseling services.",
+        "Check out online platforms like BetterHelp or Talkspace.",
+        "Don’t hesitate to reach out; there’s help available."
+      ],
+      username: 'MindfulBuddy',
+      avatar: getRandomAvatar(),
+    },
+    {
+      id: 12,
+      label: 'Study Tips',
+      text: 'How do I stay motivated to study consistently?',
+      upvotes: 14,
+      comments: [
+        "Set small, achievable goals and reward yourself.",
+        "Make a study schedule and stick to it.",
+        "Remember why you started and focus on your goals."
+      ],
+      username: 'FocusedFox',
+      avatar: getRandomAvatar(),
+    }
+    // Add other predefined posts as needed
   ]);
 
-  const [newPostText, setNewPostText] = useState('');
-  const [newComment, setNewComment] = useState('');
-  const [selectedLabel, setSelectedLabel] = useState('');
   const [showAddPost, setShowAddPost] = useState(false);
-  const [labelOptions] = useState(['Safety', 'Health', 'Harassment', 'Wellness', 'Support', 'Study Tips', 'Self-defense']);
+  const [newPostText, setNewPostText] = useState('');
+  const [selectedLabel, setSelectedLabel] = useState('');
+  const [newComment, setNewComment] = useState('');
+  const animatedValue = useState(new Animated.Value(0))[0];
 
-  // Assign random colors to labels
-  const labelColors = {
-    'Safety': '#FF6B6B',
-    'Health': '#4ECDC4',
-    'Harassment': '#F7B731',
-    'Wellness': '#A3CB38',
-    'Support': '#575FCF',
-    'Study Tips': '#F53B57',
-    'Self-defense': '#1B9CFC'
+  const toggleAddPost = () => {
+    setShowAddPost(!showAddPost);
+    Animated.timing(animatedValue, {
+      toValue: showAddPost ? 0 : 1,
+      duration: 300,
+      easing: Easing.inOut(Easing.ease),
+      useNativeDriver: false,
+    }).start();
   };
 
-  // Generate random username
-  function getRandomUsername() {
-    return randomNames[Math.floor(Math.random() * randomNames.length)];
-  }
+  const formHeight = animatedValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 250], // Adjust 250 to the height you want for the expanded form
+  });
 
-  // Add new post with selected label
+  const opacity = animatedValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 1],
+  });
+
+  // Add new post function
   const addPost = () => {
     if (newPostText && selectedLabel) {
-      setPosts([...posts, { id: posts.length + 1, label: selectedLabel, text: newPostText, upvotes: 0, comments: [], username: getRandomUsername(), avatar: 'https://randomuser.me/api/portraits/women/8.jpg' }]);
+      const newPost = {
+        id: posts.length + 1,
+        label: selectedLabel,
+        text: newPostText,
+        upvotes: 0,
+        comments: [],
+        username: randomNames[Math.floor(Math.random() * randomNames.length)],
+        avatar: getRandomAvatar(),
+      };
+      setPosts([...posts, newPost]);
       setNewPostText('');
       setSelectedLabel('');
-      setShowAddPost(false); // Hide add post fields after submission
+      toggleAddPost(); // Close the add post form after submission
     }
   };
 
-  // Add new comment, preventing empty comments
-  const addComment = (postId) => {
-    if (newComment) {
-      const updatedPosts = posts.map(post => {
-        if (post.id === postId) {
-          return { ...post, comments: [...post.comments, newComment] };
-        }
-        return post;
-      });
-      setPosts(updatedPosts);
-      setNewComment('');
-    }
-  };
-
-  // Upvote a post
-  const upvotePost = (postId) => {
-    const updatedPosts = posts.map(post => {
-      if (post.id === postId) {
-        return { ...post, upvotes: post.upvotes + 1 };
-      }
-      return post;
-    });
-    setPosts(updatedPosts);
-  };
-
-  // Render post with label, username, comments, and upvote functionality
   const renderPost = ({ item }) => (
     <View style={styles.postItem}>
-      <View style={[styles.label, { backgroundColor: labelColors[item.label] }]}>
+      {/* Label with colored background */}
+      <View style={[styles.labelContainer, { backgroundColor: labelColors[item.label] || '#ddd' }]}>
         <Text style={styles.labelText}>{item.label}</Text>
       </View>
       <View style={styles.userInfo}>
@@ -188,29 +255,14 @@ const ForumScreen = () => {
       </View>
       <Text style={styles.postText}>{item.text}</Text>
       <View style={styles.postFooter}>
-        <TouchableOpacity onPress={() => upvotePost(item.id)}>
+        <TouchableOpacity>
           <Ionicons name="arrow-up-circle" size={24} color="green" />
         </TouchableOpacity>
         <Text style={styles.upvoteText}>{item.upvotes} Upvotes</Text>
       </View>
-      <FlatList
-        data={item.comments}
-        renderItem={({ item }) => <Text style={styles.comment}>{item}</Text>}
-        keyExtractor={(comment, index) => index.toString()}
-      />
-      <View style={styles.commentInputContainer}>
-        <TextInput
-          placeholder="Add a comment"
-          value={newComment}
-          onChangeText={setNewComment}
-          style={styles.commentInput}
-        />
-        <TouchableOpacity onPress={() => addComment(item.id)}>
-          <Text style={styles.addCommentButton}>Comment</Text>
-        </TouchableOpacity>
-      </View>
     </View>
   );
+  
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -225,53 +277,60 @@ const ForumScreen = () => {
           keyExtractor={(item) => item.id.toString()}
           contentContainerStyle={styles.flatListContent}
         />
-        <TouchableOpacity style={styles.showAddPostButton} onPress={() => setShowAddPost(!showAddPost)}>
-          <Text style={styles.showAddPostButtonText}>{showAddPost ? 'Cancel' : 'Add Post'}</Text>
+
+        {/* Floating Action Button */}
+        <TouchableOpacity style={styles.fab} onPress={toggleAddPost}>
+          <Ionicons name="add" size={24} color="white" />
         </TouchableOpacity>
-        {showAddPost && (
-          <View style={styles.newPostContainer}>
-            <TextInput
-              placeholder="Write a post"
-              value={newPostText}
-              onChangeText={setNewPostText}
-              style={styles.newPostInput}
-            />
-            <View style={styles.pickerContainer}>
-              <Picker
-                selectedValue={selectedLabel}
-                onValueChange={(itemValue) => setSelectedLabel(itemValue)}
-                style={styles.picker}
-              >
-                <Picker.Item label="Select a label" value="" />
-                {labelOptions.map((label) => (
-                  <Picker.Item key={label} label={label} value={label} />
-                ))}
-              </Picker>
+
+        {/* Animated Add Post Form */}
+        <Animated.View style={[styles.newPostContainer, { height: formHeight, opacity }]}>
+          {showAddPost && (
+            <View>
+              <TextInput
+                placeholder="Write a post"
+                value={newPostText}
+                onChangeText={setNewPostText}
+                style={styles.newPostInput}
+              />
+              <View style={styles.pickerContainer}>
+                <Picker
+                  selectedValue={selectedLabel}
+                  onValueChange={(itemValue) => setSelectedLabel(itemValue)}
+                  style={styles.picker}
+                >
+                  <Picker.Item label="Select a label" value="" />
+                  {/* Add picker options for labels */}
+                </Picker>
+              </View>
+              <TouchableOpacity style={styles.submitButton} onPress={addPost}>
+                <Text style={styles.submitButtonText}>Submit Post</Text>
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity style={styles.addPostButton} onPress={addPost}>
-              <Text style={styles.addPostButtonText}>Submit Post</Text>
-            </TouchableOpacity>
-          </View>
-        )}
+          )}
+        </Animated.View>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
 
-// Styles
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
+  safeArea: { flex: 1, backgroundColor: '#f5f5f5' },
+  container: { flex: 1, backgroundColor: '#f8f9fa', padding: 20 },
+  flatListContent: { paddingBottom: 100 },
+
+  labelContainer: {
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 5,
+    alignSelf: 'flex-start',
+    marginBottom: 8,
   },
-  container: {
-    flex: 1,
-    backgroundColor: '#f8f9fa',
-    padding: 20,
+  labelText: {
+    color: '#fff',
+    fontWeight: 'bold',
   },
-  flatListContent: {
-    paddingBottom: 100, // Ensure there's space for the sticky button
-  },
+
   postItem: {
     backgroundColor: '#fff',
     padding: 15,
@@ -279,86 +338,47 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     elevation: 3,
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.2,
     shadowRadius: 1.5,
   },
-  label: {
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 5,
-    alignSelf: 'flex-start',
-  },
-  labelText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  postText: {
-    fontSize: 16,
-    marginTop: 10,
-    marginBottom: 5,
-    lineHeight: 22,
-  },
-  userInfo: {
-    flexDirection: 'row',
+  label: { fontWeight: 'bold', color: '#333' },
+  userInfo: { flexDirection: 'row', alignItems: 'center' },
+  profilePicture: { width: 40, height: 40, borderRadius: 20, marginRight: 10 },
+  username: { fontWeight: 'bold', color: '#333' },
+  postText: { marginVertical: 10, color: '#555' },
+  postFooter: { flexDirection: 'row', alignItems: 'center' },
+  upvoteText: { marginLeft: 10, color: 'gray' },
+
+  // Floating Action Button style
+  fab: {
+    position: 'absolute',
+    right: 20,
+    bottom: 20,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#28a745',
+    justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 10,
+    elevation: 5,
   },
-  profilePicture: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginRight: 10,
-  },
-  username: {
-    fontWeight: 'bold',
-    fontSize: 15,
-  },
-  postFooter: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginTop: 10,
-  },
-  upvoteText: {
-    marginLeft: 10,
-    fontSize: 14,
-    color: 'gray',
-  },
-  commentInputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  commentInput: {
-    flex: 1,
-    borderColor: '#ddd',
-    borderWidth: 1,
-    padding: 8,
-    borderRadius: 5,
-    marginRight: 10,
-    backgroundColor: '#fff',
-  },
-  addCommentButton: {
-    color: '#007BFF',
-    fontSize: 14,
-  },
+
+  // Animated Add Post form styles
   newPostContainer: {
-    marginTop: 20,
+    position: 'absolute',
+    bottom: 80,
+    left: 20,
+    right: 20,
     backgroundColor: '#fff',
-    padding: 15,
     borderRadius: 10,
-    elevation: 3,
+    padding: 15,
+    elevation: 5,
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.5,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    overflow: 'hidden',
   },
   newPostInput: {
     borderColor: '#ddd',
@@ -376,54 +396,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     overflow: 'hidden',
   },
-  picker: {
-    height: 50,
-    width: '100%',
-  },
-  addPostButton: {
+  picker: { height: 50, width: '100%' },
+  submitButton: {
     backgroundColor: '#007BFF',
     padding: 10,
     borderRadius: 5,
     alignItems: 'center',
-    marginTop: 10,
   },
-  addPostButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  showAddPostButton: {
-    backgroundColor: '#28a745',
-    padding: 15,
-    borderRadius: 30,
-    alignItems: 'center',
-    position: 'absolute',
-    bottom: 20,
-    left: 20,
-    right: 20,
-    elevation: 5,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 3,
-  },
-  showAddPostButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  comment: {
-    color: 'gray',
-    marginTop: 5,
-    marginLeft: 50,
-  },
-  emptyMessage: {
-    textAlign: 'center',
-    color: '#888',
-    marginTop: 20,
-  },
+  submitButtonText: { color: '#fff', fontWeight: 'bold' },
 });
 
 export default ForumScreen;
