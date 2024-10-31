@@ -31,7 +31,11 @@ const AddContactScreen = () => {
       <TextInput
         style={styles.input}
         value={phone}
-        onChangeText={setPhone}
+        onChangeText={(text) => {
+          if (text.length <= 10) {
+            setPhone(text);
+          }
+        }}
         placeholder="Enter phone number"
         keyboardType="phone-pad"
       />
