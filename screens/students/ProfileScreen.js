@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput, FlatList, Alert, Switch, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; // For navigation
-import { Ionicons } from '@expo/vector-icons'; // For icons
+import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput, FlatList, Alert, Switch } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
+import { createStackNavigator } from '@react-navigation/stack';
+import AddContactScreen from './AddContactScreen';
+
+const Stack = createStackNavigator();
 
 const ProfileScreen = () => {
-  const navigation = useNavigation(); // Use navigation hook for the back button
+  const navigation = useNavigation();
   const [name, setName] = useState('Ananya Sharma');
   const [email, setEmail] = useState('ananya.sharma@gmail.com');
   const [college, setCollege] = useState('XYZ College of Engineering');
   const [contacts, setContacts] = useState([
     { id: '1', name: 'Mom', phone: '123-456-7890' },
-    { id: '2', name: 'Best Friend', phone: '987-654-3210' }
+    { id: '2', name: 'Best Friend', phone: '987-654-3210' },
   ]);
   const [bio, setBio] = useState('Passionate about technology and safety.');
   const [sosEnabled, setSosEnabled] = useState(false);
@@ -18,12 +22,19 @@ const ProfileScreen = () => {
   const [hobbies, setHobbies] = useState('Reading, Traveling, Coding');
   const [recentActivities, setRecentActivities] = useState([
     { id: '1', activity: 'Attended a workshop on Cybersecurity' },
-    { id: '2', activity: 'Volunteered at a local community center' }
+    { id: '2', activity: 'Volunteered at a local community center' },
   ]);
   const [isEditing, setIsEditing] = useState(false);
 
-  const addContact = () => {
-    Alert.alert('Add Contact', 'This feature is under construction!');
+  const addContact = (newContact) => {
+    setContacts((prevContacts) => [
+      ...prevContacts,
+      { id: String(prevContacts.length + 1), ...newContact },
+    ]);
+  };
+
+  const openAddContactScreen = () => {
+    navigation.navigate('AddContact', { addContact });
   };
 
   const saveProfile = () => {
@@ -129,7 +140,7 @@ const ProfileScreen = () => {
       ListHeaderComponent={renderHeader}
       ListFooterComponent={() => (
         <View>
-          <TouchableOpacity style={styles.button} onPress={addContact}>
+          <TouchableOpacity style={styles.button} onPress={openAddContactScreen}>
             <Text style={styles.buttonText}>Add Contact</Text>
           </TouchableOpacity>
 
@@ -238,16 +249,13 @@ const styles = StyleSheet.create({
     color: '#007BFF',
     marginHorizontal: 20,
   },
-  contactList: {
-    maxHeight: 100,
-    marginHorizontal: 20,
-  },
   contactItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
+    marginHorizontal: 20,
   },
   contactName: {
     fontWeight: 'bold',
@@ -279,13 +287,11 @@ const styles = StyleSheet.create({
     borderBottomColor: '#ddd',
     marginHorizontal: 20,
   },
-  activityList: {
-    marginHorizontal: 20,
-  },
   activityItem: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 10,
+    marginHorizontal: 20,
   },
   activityText: {
     marginLeft: 10,
@@ -321,4 +327,13 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfileScreen;
+const ProfileStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Profile" component={ProfileScreen} />
+      <Stack.Screen name="AddContact" component={AddContactScreen} />
+    </Stack.Navigator>
+  );
+};
+
+export default ProfileStack;
