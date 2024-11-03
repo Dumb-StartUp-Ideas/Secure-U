@@ -53,6 +53,7 @@ function StudentStackNavigator() {
   );
 }
 
+
 export default function App() {
   return (
     <NavigationContainer>
